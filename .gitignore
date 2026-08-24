@@ -49,3 +49,9 @@ npm-debug.log*
 # playwright
 /playwright/.cache/
 /blob-report/
+
+# sample pages for OCR tuning. Someone else's copyrighted work, and this
+# repository is public, so they stay local.
+fixtures/pages/*
+!fixtures/pages/.gitkeep
+fixtures/out/

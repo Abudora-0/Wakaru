@@ -26,7 +26,8 @@
     "e2e:live": "playwright test --grep @live",
     "e2e:ui": "playwright test --ui",
     "e2e:report": "playwright show-report",
-    "check:all": "npm run check && npm run build && npm run e2e"
+    "check:all": "npm run check && npm run build && npm run e2e",
+    "ocr:tune": "node scripts/tune-ocr.mjs"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
