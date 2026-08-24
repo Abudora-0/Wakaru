@@ -7,51 +7,82 @@
   </head>
   <body class="wk-scope">
     <header class="head">
-      <svg viewBox="0 0 96 84" width="34" aria-hidden="true">
+      <svg class="head__mark" viewBox="0 0 96 84" width="40" height="35" aria-hidden="true">
         <path
           d="M34 8 C54 8 68 21 68 36 C68 51 54 62 36 62 L30 62 C29 68 25 73 18 76 C22 70 22 66 20 62 C10 58 4 48 4 36 C4 21 16 8 34 8 Z"
           fill="var(--wk-text)"
         />
-        <text x="36" y="46" font-size="28" fill="var(--wk-bg)" text-anchor="middle" font-family="var(--wk-font-display)">分</text>
+        <g transform="translate(13.5 12) scale(0.28)" fill="none" stroke="var(--wk-bg)"
+           stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M44 8 L18 42" />
+          <path d="M58 8 L84 42" />
+          <path d="M22 54 H70 C72 74 66 86 54 92" />
+          <path d="M44 54 C40 70 34 82 20 92" />
+        </g>
         <circle cx="82" cy="26" r="6" fill="var(--wk-seal)" />
         <circle cx="89" cy="43" r="3.2" fill="var(--wk-seal)" opacity="0.62" />
       </svg>
-      <span>
+
+      <span class="head__text">
         <strong>Wakaru</strong>
         <small>Read raw pages in place</small>
       </span>
     </header>
 
-    <main>
-      <label class="field">
-        <span class="wk-caps">Pages are written in</span>
+    <main class="body">
+      <section class="field">
+        <h2 class="field__label wk-caps">Pages are written in</h2>
         <div class="chips" id="scripts"></div>
-      </label>
+      </section>
 
-      <label class="field">
-        <span class="wk-caps" for="target">Translate into</span>
-        <select id="target" class="wk-field wk-field--boxed"></select>
-      </label>
+      <section class="field">
+        <h2 class="field__label wk-caps" id="target-label">Translate into</h2>
+        <div id="target"></div>
+      </section>
 
-      <label class="field">
-        <span class="wk-caps">Smallest image to offer</span>
-        <input id="minsize" type="number" min="80" max="2000" step="20" class="wk-field wk-field--boxed" />
-      </label>
+      <section class="field">
+        <h2 class="field__label wk-caps" id="minsize-label">Smallest image to offer</h2>
+        <div class="wk-stepper">
+          <button type="button" class="wk-stepper__btn" id="minsize-down" aria-label="Decrease by twenty pixels">
+            <span aria-hidden="true">&#8722;</span>
+          </button>
+          <input
+            id="minsize"
+            class="wk-field wk-field--number"
+            type="number"
+            min="80"
+            max="2000"
+            step="20"
+            inputmode="numeric"
+            aria-labelledby="minsize-label"
+          />
+          <button type="button" class="wk-stepper__btn" id="minsize-up" aria-label="Increase by twenty pixels">
+            <span aria-hidden="true">+</span>
+          </button>
+        </div>
+        <p class="hint">Pixels. Anything smaller is treated as an icon, not a page.</p>
+      </section>
 
-      <label class="field">
-        <span class="wk-caps">Translator endpoint</span>
-        <input id="apibase" type="url" class="wk-field wk-field--boxed" spellcheck="false" />
-        <small class="hint">
-          Point this at your own deployment to keep every request on your own infrastructure.
-        </small>
-      </label>
+      <section class="field">
+        <h2 class="field__label wk-caps" id="apibase-label">Translator endpoint</h2>
+        <input
+          id="apibase"
+          class="wk-field wk-field--boxed"
+          type="url"
+          spellcheck="false"
+          autocomplete="off"
+          aria-labelledby="apibase-label"
+        />
+        <p class="hint">Point this at your own deployment to keep every request on your own infrastructure.</p>
+      </section>
+    </main>
 
-      <p class="hint" id="status" role="status"></p>
-
+    <footer class="foot">
+      <p class="foot__status wk-caps" id="status" role="status" aria-live="polite"></p>
       <p class="hint">
         Recognition runs on this machine. Only the recognised text is sent to the translator, never the image.
       </p>
-    </main>
+    </footer>
 
     <script type="module" src="./main.ts"></script>
   </body>

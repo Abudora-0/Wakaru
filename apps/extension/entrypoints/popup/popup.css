@@ -1,30 +1,72 @@
-body {
-  width: 320px;
-  margin: 0;
-  padding: var(--wk-s-4);
-  font-family: var(--wk-font-ui);
-  font-size: var(--wk-t-sm);
-  color: var(--wk-text);
+/*
+ * The popup.
+ *
+ * A browser popup sizes itself to its content and paints nothing behind it, so
+ * the html element has to carry the background as well as the body. Without
+ * that, the host page shows through in a ring around the edges.
+ */
+
+/*
+ * The popup loads the tokens and the control primitives but not the web app's
+ * global reset, so it carries its own. Without box-sizing every full width
+ * field overflows the fixed popup width by the size of its own padding.
+ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
   background-color: var(--wk-bg);
 }
+
+body {
+  width: 360px;
+  margin: 0;
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-sm);
+  line-height: var(--wk-lh-snug);
+  color: var(--wk-text);
+  background-color: var(--wk-bg);
+  background-image:
+    radial-gradient(var(--wk-rule-hair) 0.5px, transparent 0.5px),
+    radial-gradient(var(--wk-rule-hair) 0.5px, transparent 0.5px);
+  background-size: 11px 11px, 17px 17px;
+  background-position: 0 0, 5px 7px;
+  overflow-x: hidden;
+}
+
+/* --------------------------------------------------------------- masthead */
 
 .head {
   display: flex;
   align-items: center;
   gap: var(--wk-s-3);
-  padding-bottom: var(--wk-s-3);
-  margin-bottom: var(--wk-s-4);
+  padding: var(--wk-s-4);
   border-bottom: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  background-color: var(--wk-surface);
+}
+
+.head__mark {
+  flex: none;
+}
+
+.head__text {
+  min-width: 0;
 }
 
 .head strong {
   display: block;
   font-family: var(--wk-font-display);
   font-size: var(--wk-t-lg);
+  font-weight: 400;
   line-height: 1;
 }
 
 .head small {
+  display: block;
+  margin-top: 3px;
   font-family: var(--wk-font-mono);
   font-size: 9px;
   letter-spacing: var(--wk-track-caps);
@@ -32,14 +74,25 @@ body {
   color: var(--wk-text-muted);
 }
 
-.field {
-  display: block;
-  margin-bottom: var(--wk-s-4);
+/* ----------------------------------------------------------------- fields */
+
+.body {
+  padding: var(--wk-s-4);
 }
 
-.field > .wk-caps {
+.field {
+  margin-bottom: var(--wk-s-5);
+}
+
+.field:last-child {
+  margin-bottom: 0;
+}
+
+.field__label {
   display: block;
-  margin-bottom: var(--wk-s-1);
+  margin: 0 0 var(--wk-s-2);
+  font-size: var(--wk-t-xs);
+  font-weight: 400;
 }
 
 .chips {
@@ -49,12 +102,44 @@ body {
 }
 
 .hint {
-  margin-top: var(--wk-s-1);
+  margin: var(--wk-s-2) 0 0;
   font-size: var(--wk-t-xs);
-  line-height: 1.5;
+  line-height: 1.45;
   color: var(--wk-text-muted);
 }
 
-select.wk-field {
-  cursor: pointer;
+/* The listbox is absolutely positioned, so its parent has to be the anchor. */
+.wk-combo {
+  position: relative;
+}
+
+/* A popup is short, so the language list gets a hard ceiling and scrolls. */
+.wk-listbox {
+  max-height: 232px;
+}
+
+/* ------------------------------------------------------------------- foot */
+
+.foot {
+  padding: var(--wk-s-3) var(--wk-s-4) var(--wk-s-4);
+  border-top: var(--wk-rule-w) solid var(--wk-rule);
+  background-color: var(--wk-surface);
+}
+
+.foot .hint {
+  margin-top: 0;
+}
+
+.foot__status {
+  display: none;
+  margin: 0 0 var(--wk-s-2);
+  padding: 3px var(--wk-s-2);
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-ok);
+  border: 1px solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+}
+
+.foot__status[data-shown="true"] {
+  display: inline-block;
 }

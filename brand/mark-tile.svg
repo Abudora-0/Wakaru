@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-label="Wakaru">
+  <title>Wakaru</title>
+  <desc>The Wakaru mark set on a dark tile: a paper coloured brush balloon with the kanji for understanding knocked out of it, and a vermilion drop at the corner.</desc>
+
+  <!--
+    The tile cut, used for the browser extension icon.
+
+    A transparent balloon disappears against a dark browser toolbar, so this
+    version carries its own ground. The balloon is reversed to paper on ink,
+    which also gives the kanji far more contrast at small sizes than knocking
+    it out of a dark balloon would.
+  -->
+  <rect width="128" height="128" rx="16" fill="#14110f" />
+
+  <g transform="translate(8 14) scale(1.3)">
+    <path
+      d="M34 8 C54 8 68 21 68 36 C68 51 54 62 36 62 L30 62 C29 68 25 73 18 76 C22 70 22 66 20 62 C10 58 4 48 4 36 C4 21 16 8 34 8 Z"
+      fill="#f4efe6"
+    />
+    <g
+      transform="translate(17.5 16) scale(0.37)"
+      fill="none"
+      stroke="#14110f"
+      stroke-width="12"
+      stroke-linecap="round"
+      stroke-linejoin="round"
+    >
+      <path d="M44 8 L18 42" />
+      <path d="M58 8 L84 42" />
+      <path d="M22 54 H70 C72 74 66 86 54 92" />
+      <path d="M44 54 C40 70 34 82 20 92" />
+    </g>
+  </g>
+
+  <circle cx="106" cy="26" r="12" fill="#d8412f" />
+</svg>

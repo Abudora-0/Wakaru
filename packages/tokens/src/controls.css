@@ -267,6 +267,16 @@
   background-color: var(--wk-surface-raised);
 }
 
+/*
+ * A boxed field is a filled surface, so the vermilion hover wash that works on
+ * the bare underline variant turns it muddy, badly so against the warm blacks
+ * of Night Ink. Boxed fields move their border instead.
+ */
+.wk-field--boxed:hover:not(:disabled) {
+  background-color: var(--wk-surface-raised);
+  border-color: var(--wk-seal);
+}
+
 .wk-field--boxed:focus {
   border-width: var(--wk-rule-w);
   border-color: var(--wk-seal);
@@ -758,4 +768,89 @@
   .wk-loading {
     animation: none;
   }
+}
+
+/* ==========================================================================
+   12. Stepper. Replaces the native number spinner, which cannot be themed.
+   ========================================================================== */
+
+.wk-field--number {
+  -moz-appearance: textfield;
+  appearance: textfield;
+  text-align: center;
+}
+
+.wk-field--number::-webkit-outer-spin-button,
+.wk-field--number::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  appearance: none;
+  margin: 0;
+}
+
+.wk-stepper {
+  display: flex;
+  align-items: stretch;
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  background-color: var(--wk-surface-raised);
+  overflow: hidden;
+}
+
+.wk-stepper:focus-within {
+  border-color: var(--wk-seal);
+  box-shadow: var(--wk-shadow-sm);
+}
+
+.wk-stepper__btn {
+  flex: none;
+  width: 38px;
+  display: grid;
+  place-items: center;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-md);
+  line-height: 1;
+  color: var(--wk-text);
+  background-color: transparent;
+  border: 0;
+  cursor: pointer;
+  transition: background-color var(--wk-dur-1) linear;
+}
+
+.wk-stepper__btn:first-child {
+  border-inline-end: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.wk-stepper__btn:last-child {
+  border-inline-start: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.wk-stepper__btn:hover:not(:disabled) {
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+}
+
+.wk-stepper__btn:active:not(:disabled) {
+  background-color: var(--wk-seal-deep);
+}
+
+.wk-stepper__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.wk-stepper .wk-field {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  border-radius: 0;
+  background-color: transparent;
+}
+
+.wk-stepper .wk-field:hover:not(:disabled) {
+  background-color: transparent;
+}
+
+.wk-stepper .wk-field:focus {
+  border: 0;
+  box-shadow: none;
 }

@@ -13,8 +13,9 @@ the interface rather than decoration sitting on top of it.
 
 | File | Use |
 |---|---|
-| `mark.svg` | The full mark. Anything 64px and larger. |
-| `mark-small.svg` | The small cut. Anything under 64px. |
+| `mark.svg` | The full mark on a transparent ground. In page, and in the lockup. |
+| `mark-tile.svg` | The mark reversed onto a dark tile. Every app icon, 64px and up. |
+| `mark-tile-small.svg` | A heavier redraw of the tile for anything under 64px. |
 | `lockup.svg` | Horizontal lockup with the wordmark. |
 | `og.svg` | Social card, 1200 by 630. |
 
@@ -28,14 +29,21 @@ npm run brand:build
 That writes the extension icons, the web app icons, the favicon and the social
 card. Do not hand edit anything it produces.
 
-## Two cuts, on purpose
+## Three cuts, on purpose
 
-`mark-small.svg` is a separate drawing, not the full mark scaled down. Below
-roughly 48 pixels the tail and the trailing drops collapse into noise, so the
-small cut drops to a single drop, thickens the strokes and lets the balloon
-fill the frame as a rounded ink tile. Scaling the full mark down to 16px
-produces an unreadable smudge, which is why the build script switches drawings
+**The tile carries its own ground.** A transparent balloon disappears against
+a dark browser toolbar, so every app icon uses `mark-tile.svg`, which reverses
+the balloon to paper on an ink tile. That also gives the kanji far more
+contrast at small sizes than knocking it out of a dark balloon would.
+
+**The small cut is a separate drawing, not the tile scaled down.** Below
+roughly 48 pixels the tail and the thin strokes collapse into noise, so
+`mark-tile-small.svg` enlarges the balloon to fill the tile, thickens every
+stroke and shortens the tail to a stub. The build script switches drawings
 rather than resolutions.
+
+**The transparent mark stays for in page use**, where the page already
+provides the ground and the tile would look like a sticker.
 
 ## The kanji is drawn, not set
 
