@@ -268,6 +268,12 @@ function Ledger({ result, error, busy }: { result: TranslationResult | null; err
 
   return (
     <>
+      {result.lossyNote ? (
+        <p className="notice" role="note">
+          <strong>This script conversion is an approximation.</strong> {result.lossyNote}
+        </p>
+      ) : null}
+
       <div className="ledger">
         <span className="ledger__stamp">{result.provider}</span>
         {result.cached ? <span>served from cache</span> : null}

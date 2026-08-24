@@ -88,6 +88,11 @@ describe("transliteration", () => {
     expect(transliterate("Београд 2026", "serbian-cyrl-to-latn")).toBe("Beograd 2026");
   });
 
+  it("writes a short i before a long aa as ya in Shahmukhi", () => {
+    // ਪਿਆਰ is پیار, not پآر. A per character map gets this wrong because the
+    // matra and the vowel that follows it form one unit.
+    expect(transliterate("ਪਿਆਰ", "gurmukhi-to-shahmukhi")).toBe("پیار");
+  });
   it("converts Gurmukhi to Shahmukhi and flags the loss", () => {
     const result = applyDialect("ਪੰਜਾਬੀ", "pa-Arab");
     expect(result.text).not.toContain("ਪ");

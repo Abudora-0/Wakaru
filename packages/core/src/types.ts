@@ -57,6 +57,12 @@ export interface TranslationResult extends ProviderTranslation {
   fellBackFrom: string[];
   /** Present when the target was a dialect and the overlay changed something. */
   dialectEdits: DialectEdit[];
+  /**
+   * Set when a script conversion discarded information, for example a
+   * Shahmukhi rendering that cannot record short vowels. The interface shows
+   * this so an approximation is never presented as exact.
+   */
+  lossyNote?: string;
   /** True when the result came out of the cache rather than the network. */
   cached: boolean;
   attribution: Attribution[];

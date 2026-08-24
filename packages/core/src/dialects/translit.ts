@@ -48,6 +48,9 @@ const SERBIAN_CYRL_TO_LATN: Record<string, string> = {
 /* Gurmukhi to Shahmukhi. Aspirates are two characters in Shahmukhi, so those
  * conjuncts are listed first. */
 const GURMUKHI_TO_SHAHMUKHI: Record<string, string> = {
+  // Sequences first, because longest match wins. A short i before a long aa
+  // is written as ya in Shahmukhi, so ਪਿਆਰ is پیار and not پآر.
+  "ਿਆ": "یا", "ਿਅ": "یا", "ਿਏ": "یے",
   "ਖ਼": "خ", "ਗ਼": "غ", "ਜ਼": "ز", "ਫ਼": "ف", "ਸ਼": "ش", "ਲ਼": "ل",
   "ਖ": "کھ", "ਘ": "گھ", "ਛ": "چھ", "ਝ": "جھ",
   "ਠ": "ٹھ", "ਢ": "ڈھ", "ਥ": "تھ", "ਧ": "دھ", "ਫ": "پھ", "ਭ": "بھ",

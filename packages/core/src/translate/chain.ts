@@ -120,12 +120,14 @@ export class TranslateChain {
         const attribution: Attribution[] = [provider.attribution];
         let finalText = raw.text;
         let dialectEdits: TranslationResult["dialectEdits"] = [];
+        let lossyNote: string | undefined;
 
         if (dialect) {
           const script = dialect.script ?? scriptOf(dialect.base);
           const applied = applyDialect(raw.text, dialect.code, script);
           finalText = applied.text;
           dialectEdits = applied.edits;
+          lossyNote = applied.lossyNote;
           attribution.push({
             source: `Wakaru dialect overlay, ${dialect.name}`,
             license: "MIT",
@@ -141,6 +143,7 @@ export class TranslateChain {
           provider: provider.id,
           fellBackFrom: [...fellBackFrom],
           dialectEdits,
+          ...(lossyNote ? { lossyNote } : {}),
           cached: false,
           attribution,
         };
