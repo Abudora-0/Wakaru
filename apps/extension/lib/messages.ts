@@ -64,8 +64,17 @@ export interface Settings {
   autoScan: boolean;
 }
 
+/**
+ * The default endpoint is a real deployment of this project.
+ *
+ * It must never be a guessed or aspirational hostname. wakaru.vercel.app, the
+ * obvious guess, is registered to an unrelated JavaScript decompiler, and
+ * pointing here would have sent recognised text from people's pages to a
+ * stranger's server. Change this to your own deployment, or set it in the
+ * popup under Translator endpoint.
+ */
 export const DEFAULT_SETTINGS: Settings = {
-  apiBase: "https://wakaru.vercel.app",
+  apiBase: "https://wakaruu.vercel.app",
   script: "japanese",
   target: "en",
   minImageSize: 320,

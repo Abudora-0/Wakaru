@@ -93,7 +93,19 @@ export function MangaReader() {
       setPage(result);
 
       if (result.regions.length === 0) {
-        setError("No readable text was found on this page.");
+        /*
+         * Two very different outcomes, and saying "no text found" for both is
+         * wrong. Nothing detected means the artwork gave the detector nothing
+         * to work with. Plenty detected but nothing readable means the regions
+         * were found and the recogniser could not make them out, which is
+         * worth telling someone, because a bigger or cleaner scan usually
+         * fixes it.
+         */
+        setError(
+          result.detected > 0
+            ? `Found ${result.detected} text ${result.detected === 1 ? "region" : "regions"}, but none could be read confidently. A larger or cleaner scan usually helps.`
+            : "No text regions were found on this page.",
+        );
         return;
       }
 
@@ -283,7 +295,7 @@ export function MangaReader() {
           <div className="runhead">
             <h2 className="runhead__title" style={{ fontSize: "var(--wk-t-lg)" }}>Transcript</h2>
             <span className="runhead__note">
-              {page.regions.length} panels read in {(page.elapsedMs / 1000).toFixed(1)}s
+              {page.regions.length} of {page.detected} read in {(page.elapsedMs / 1000).toFixed(1)}s
             </span>
           </div>
 

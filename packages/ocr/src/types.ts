@@ -25,6 +25,18 @@ export interface OcrPage {
   width: number;
   height: number;
   regions: OcrRegion[];
+  /**
+   * How many regions the detector found, before recognition.
+   *
+   * Kept separate from regions.length because the two answer different
+   * questions. A page where detection found nothing needs different artwork.
+   * A page where detection found plenty but recognition could not read any of
+   * it is a model or a preprocessing problem, and telling a reader "no text
+   * found" in that case is simply wrong.
+   */
+  detected: number;
+  /** Regions dropped for falling under the confidence floor. */
+  rejected: number;
   /** Milliseconds spent, useful because OCR is the slow part of the reader. */
   elapsedMs: number;
 }

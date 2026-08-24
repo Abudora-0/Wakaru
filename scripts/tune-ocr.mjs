@@ -17,7 +17,7 @@
  * Pages go in fixtures/pages/. Overlays come out in fixtures/out/.
  */
 
-import { spawn } from "node:child_process";
+import { spawn, spawnSync } from "node:child_process";
 import { mkdir, readdir, writeFile } from "node:fs/promises";
 import { basename, extname, join } from "node:path";
 import { chromium } from "@playwright/test";
@@ -68,10 +68,32 @@ async function main() {
 
   await mkdir(OUT, { recursive: true });
 
+  /*
+   * Spawned through a shell on Windows, which means kill() reaches the shell
+   * and not the Next process underneath it. A server left running from an
+   * earlier run then answers on this port while holding a build that no longer
+   * matches the files on disk, so its chunk requests 404, the client never
+   * hydrates, and every page looks mysteriously inert. The whole tree gets
+   * killed below rather than just the child.
+   */
   const server = spawn("npm", ["run", "start", "--workspace", "@wakaru/web", "--", "--port", String(PORT)], {
     stdio: "ignore",
     shell: process.platform === "win32",
   });
+
+  const killServerTree = () => {
+    if (process.platform === "win32") {
+      spawnSync("taskkill", ["/pid", String(server.pid), "/T", "/F"], { stdio: "ignore" });
+    } else {
+      try {
+        process.kill(-server.pid, "SIGTERM");
+      } catch {
+        server.kill();
+      }
+    }
+  };
+
+  process.on("exit", killServerTree);
 
   const report = [];
 
@@ -105,9 +127,13 @@ async function main() {
       process.stdout.write(`  ${file.padEnd(34)} ${script.padEnd(22)}`);
 
       await page.goto(`${BASE}/read`);
-      await page.getByRole("button", { name: script, exact: true }).click();
+
+      // Upload before touching the chips. Selecting a script re-renders the
+      // reader, and doing that between picking the file and the image landing
+      // loses the selection.
       await page.locator('input[type="file"]').setInputFiles(join(PAGES, file));
-      await page.waitForSelector(".plate img");
+      await page.waitForSelector(".plate img", { timeout: 60_000 });
+      await page.getByRole("button", { name: script, exact: true }).click();
 
       const started = Date.now();
       await page.getByRole("button", { name: /Read this page/ }).click();
@@ -117,6 +143,14 @@ async function main() {
       const elapsed = Date.now() - started;
 
       const failure = await page.locator(".progress[role=alert]").textContent().catch(() => null);
+
+      // The transcript only lists regions that passed the confidence floor,
+      // so the detected total is read from the heading as well. Measuring only
+      // the survivors made detection look far worse than it is.
+      const heading = await page.locator(".transcript .runhead__note").textContent().catch(() => "");
+      // Parsed by splitting rather than by regex, purely because it is
+      // easier to read: the heading is "6 of 16 read in 13.6s".
+      const detected = Number((heading ?? "").split(" of ")[1]?.split(" read")[0] ?? 0);
 
       const rows = await page.locator(".panelrow").evaluateAll((nodes) =>
         nodes.map((node) => ({
@@ -142,7 +176,8 @@ async function main() {
       const entry = {
         file,
         script,
-        bubbles: rows.length,
+        detected,
+        readable: rows.length,
         vertical,
         coveragePercent: Number(coverage.toFixed(1)),
         medianConfidence: confidences.length
@@ -157,7 +192,7 @@ async function main() {
       console.log(
         entry.error
           ? `FAILED  ${entry.error}`
-          : `${String(entry.bubbles).padStart(3)} bubbles  ${String(entry.vertical).padStart(2)} vertical  median conf ${String(entry.medianConfidence).padStart(3)}  ${entry.seconds}s`,
+          : `${String(entry.detected).padStart(3)} detected  ${String(entry.readable).padStart(3)} readable  ${String(entry.vertical).padStart(2)} vertical  median conf ${String(entry.medianConfidence).padStart(3)}  ${entry.seconds}s`,
       );
 
       await page.locator(".plate").screenshot({ path: join(OUT, `${basename(file, extname(file))}-overlay.png`) });
@@ -165,7 +200,7 @@ async function main() {
 
     await browser.close();
   } finally {
-    server.kill();
+    killServerTree();
   }
 
   await writeFile(join(OUT, "report.json"), `${JSON.stringify(report, null, 2)}\n`);

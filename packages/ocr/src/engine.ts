@@ -121,6 +121,7 @@ export async function recognizePage(
   options.onProgress?.({ stage: "detecting-bubbles", value: 1 });
 
   const regions: OcrRegion[] = [];
+  let rejected = 0;
 
   for (let index = 0; index < boxes.length; index++) {
     if (options.signal?.aborted) break;
@@ -141,7 +142,10 @@ export async function recognizePage(
         options.onProgress?.({ stage: "loading-model", value }),
       );
 
-      if (!text || confidence < minConfidence) continue;
+      if (!text || confidence < minConfidence) {
+        rejected++;
+        continue;
+      }
 
       regions.push({
         id: `r${index}`,
@@ -152,6 +156,7 @@ export async function recognizePage(
       });
     } catch {
       // One unreadable bubble should not lose the rest of the page.
+      rejected++;
       continue;
     }
   }
@@ -161,6 +166,8 @@ export async function recognizePage(
   return {
     width,
     height,
+    detected: boxes.length,
+    rejected,
     // detectBubbles already returned reading order, and regions were pushed
     // in that order, so no second sort is needed here.
     regions,

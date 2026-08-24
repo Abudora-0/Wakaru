@@ -19,6 +19,8 @@ free sources. No API keys, no accounts, no paid tier, no trial.
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2E6E57?style=flat-square)](CONTRIBUTING.md)
 [![CI](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml/badge.svg)](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml)
 
+**[wakaruu.vercel.app](https://wakaruu.vercel.app)**
+
 </div>
 
 <div align="center">
@@ -287,9 +289,15 @@ None of these are needed. See [.env.example](.env.example).
 
 ### After the first deploy
 
-The extension needs to know where your deployment lives. Either set it in the
-extension popup under **Translator endpoint**, or change the default in
+The extension needs to know where your deployment lives. It ships pointed at
+https://wakaruu.vercel.app. To use your own, set it in the extension popup under **Translator
+endpoint**, or change the default in
 [`apps/extension/lib/messages.ts`](apps/extension/lib/messages.ts) and rebuild.
+
+Pick the hostname carefully. `wakaru.vercel.app`, the obvious choice, is
+already registered to an unrelated JavaScript decompiler, and an extension
+pointed there would post recognised text from people's pages to a stranger's
+server.
 
 ## House rules
 

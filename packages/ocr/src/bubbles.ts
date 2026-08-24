@@ -1,5 +1,6 @@
 import type { Box } from "./types";
 import { binarize, createCanvas, otsuThreshold, stretchContrast, toGreyscale } from "./preprocess";
+import { fillTextHoles, open } from "./morphology";
 
 /**
  * Speech bubble detection.
@@ -27,15 +28,28 @@ export interface DetectOptions {
   /** Ink coverage inside the box that reads as text rather than as artwork. */
   minInkRatio?: number;
   maxInkRatio?: number;
+/**
+   * Largest bounding box, as a fraction of the page's shorter edge, that a
+   * dark shape may have and still be treated as lettering to fill in.
+   */
+  maxGlyphRatio?: number;
+  /**
+   * Radius used to sever the thin white bridges that join a balloon to the
+   * panel it sits on. Larger separates more aggressively but rounds off small
+   * balloons.
+   */
+  openRadius?: number;
 }
 
 const DEFAULTS: Required<DetectOptions> = {
   workingWidth: 900,
   minAreaRatio: 0.0012,
-  maxAreaRatio: 0.28,
-  minFillRatio: 0.5,
+  maxAreaRatio: 0.18,
+  minFillRatio: 0.35,
   minInkRatio: 0.02,
   maxInkRatio: 0.55,
+  maxGlyphRatio: 0.05,
+  openRadius: 2,
 };
 
 interface Component {
@@ -44,7 +58,8 @@ interface Component {
   maxX: number;
   maxY: number;
   area: number;
-  touchesBorder: boolean;
+  /** Which page edges this region reaches, used to spot the page background. */
+  sides: { left: boolean; right: boolean; top: boolean; bottom: boolean };
 }
 
 /**
@@ -68,7 +83,7 @@ function labelLightRegions(mask: Uint8Array, width: number, height: number): Com
       maxX: 0,
       maxY: 0,
       area: 0,
-      touchesBorder: false,
+      sides: { left: false, right: false, top: false, bottom: false },
     };
 
     stack.push(start);
@@ -84,7 +99,10 @@ function labelLightRegions(mask: Uint8Array, width: number, height: number): Com
       if (y < component.minY) component.minY = y;
       if (x > component.maxX) component.maxX = x;
       if (y > component.maxY) component.maxY = y;
-      if (x === 0 || y === 0 || x === width - 1 || y === height - 1) component.touchesBorder = true;
+      if (x === 0) component.sides.left = true;
+      if (y === 0) component.sides.top = true;
+      if (x === width - 1) component.sides.right = true;
+      if (y === height - 1) component.sides.bottom = true;
 
       // Four way connectivity is enough and keeps thin ink lines from
       // leaking two neighbouring bubbles into one component diagonally.
@@ -142,18 +160,61 @@ export function detectBubbles(source: CanvasImageSource, sourceWidth: number, so
   binarize(image.data, otsuThreshold(image.data));
 
   // 1 for light, 0 for ink.
-  const mask = new Uint8Array(width * height);
+  const inkMask = new Uint8Array(width * height);
   for (let i = 0, p = 0; i < image.data.length; i += 4, p++) {
-    mask[p] = (image.data[i] ?? 0) > 127 ? 1 : 0;
+    inkMask[p] = (image.data[i] ?? 0) > 127 ? 1 : 0;
   }
 
+  return boxesFromMask(inkMask, width, height, scale, sourceWidth, sourceHeight, settings);
+}
+
+/**
+ * The detector proper, working on a binary mask.
+ *
+ * Kept apart from the canvas work above so it can be run and measured outside
+ * a browser. Tuning thresholds against real pages needs a fast loop, and a
+ * loop that has to start a browser and a recogniser to try one number is not
+ * one anybody will run twice.
+ */
+export function boxesFromMask(
+  inkMask: Uint8Array,
+  width: number,
+  height: number,
+  scale: number,
+  sourceWidth: number,
+  sourceHeight: number,
+  options: DetectOptions = {},
+): Box[] {
+  const settings = { ...DEFAULTS, ...options };
+
+  /*
+   * Fill the lettering first, so each balloon interior is one solid shape
+   * rather than a blob full of holes. This is done by bounding box rather than
+   * by dilation: a dilation large enough to swallow a glyph also bridges the
+   * balloon to the panel behind it, since a balloon outline is no thicker than
+   * the lettering it contains.
+   *
+   * Then open, which severs whatever thin light bridges remain. With the holes
+   * already filled the erosion has solid shapes to work on and does not shred
+   * the interior around every glyph.
+   */
+  const maxGlyph = Math.round(Math.min(width, height) * settings.maxGlyphRatio);
+  const filled = fillTextHoles(inkMask, width, height, maxGlyph);
+  const shapes = open(filled, width, height, settings.openRadius);
+
   const pageArea = width * height;
-  const components = labelLightRegions(mask, width, height);
+  const components = labelLightRegions(shapes, width, height);
   const boxes: Box[] = [];
 
   for (const component of components) {
-    // The page background is the light region that reaches the edge.
-    if (component.touchesBorder) continue;
+    /*
+     * The page background reaches nearly every edge. A balloon cropped by the
+     * page edge reaches one, or two at a corner, and throwing those away loses
+     * the bottom balloon on most webtoon strips, where the artwork is cut into
+     * fixed height slices straight through the lettering.
+     */
+    const sidesTouched = Object.values(component.sides).filter(Boolean).length;
+    if (sidesTouched >= 3) continue;
 
     const areaRatio = component.area / pageArea;
     if (areaRatio < settings.minAreaRatio || areaRatio > settings.maxAreaRatio) continue;
@@ -170,7 +231,7 @@ export function detectBubbles(source: CanvasImageSource, sourceWidth: number, so
     const ratio = boxWidth / boxHeight;
     if (ratio > 12 || ratio < 1 / 12) continue;
 
-    const ink = inkRatio(mask, width, component);
+    const ink = inkRatio(inkMask, width, component);
     if (ink < settings.minInkRatio || ink > settings.maxInkRatio) continue;
 
     // Pad outward a little: the interior component stops at the ink outline,
