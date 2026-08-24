@@ -82,7 +82,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <a href="https://lingualibre.org">Lingua Libre</a>.
               </p>
               <p>
-                <a href="https://github.com/wakaru/wakaru">Source</a> under MIT.
+                <a href="https://github.com/Abudora-0/Wakaru">Source</a> under MIT.
               </p>
             </div>
           </footer>

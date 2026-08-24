@@ -17,6 +17,7 @@ free sources. No API keys, no accounts, no paid tier, no trial.
 [![Languages](https://img.shields.io/badge/languages-107-14110F?style=flat-square)](#languages-and-dialects)
 [![Dialects](https://img.shields.io/badge/dialects-31%20curated-D8412F?style=flat-square)](#languages-and-dialects)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2E6E57?style=flat-square)](CONTRIBUTING.md)
+[![CI](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml/badge.svg)](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml)
 
 </div>
 
@@ -47,8 +48,8 @@ site you are already reading.
 ## Quick start
 
 ```bash
-git clone https://github.com/wakaru/wakaru.git
-cd wakaru
+git clone https://github.com/Abudora-0/Wakaru.git
+cd Wakaru
 npm install
 npm run dev
 ```
@@ -255,6 +256,40 @@ wakaru/
   docker/         self hosted LibreTranslate
   scripts/        house style guard, brand build
 ```
+
+## Deploying
+
+Wakaru needs no environment variables to run, so a deploy is genuinely just an
+import. The only thing to get right is the root directory, because this is an
+npm workspace monorepo and the site lives in `apps/web`.
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FAbudora-0%2FWakaru&project-name=wakaru&repository-name=wakaru&root-directory=apps%2Fweb)
+
+Importing by hand instead:
+
+1. **vercel.com/new**, then import `Abudora-0/Wakaru`.
+2. Set **Root Directory** to `apps/web`. Vercel still installs from the
+   workspace root, so the shared packages resolve.
+3. Framework preset should read **Next.js**. Leave the build and output
+   settings alone.
+4. Deploy. Nothing else is required: every provider works anonymously.
+
+### Optional environment variables
+
+None of these are needed. See [.env.example](.env.example).
+
+| Variable | Effect |
+|---|---|
+| `MYMEMORY_EMAIL` | Lifts the MyMemory daily budget from 5,000 to 50,000 characters |
+| `LIBRETRANSLATE_URL` | Points at your own LibreTranslate, which removes the quota entirely and takes priority over everything else |
+| `LIBRETRANSLATE_API_KEY` | Only for a hosted LibreTranslate instance |
+| `WAKARU_ENABLE_GTX` | Turns on the undocumented Google endpoint. Read the note above before you do |
+
+### After the first deploy
+
+The extension needs to know where your deployment lives. Either set it in the
+extension popup under **Translator endpoint**, or change the default in
+[`apps/extension/lib/messages.ts`](apps/extension/lib/messages.ts) and rebuild.
 
 ## House rules
 

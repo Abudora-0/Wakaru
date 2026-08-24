@@ -131,7 +131,7 @@ export class TranslateChain {
           attribution.push({
             source: `Wakaru dialect overlay, ${dialect.name}`,
             license: "MIT",
-            url: "https://github.com/wakaru/wakaru#dialects",
+            url: "https://github.com/Abudora-0/Wakaru#dialects",
           });
         }
 
