@@ -43,6 +43,39 @@ jobs:
       - name: Build the extension
         run: npm run ext:build
 
+  e2e:
+    name: End to end
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install the browser
+        run: npx playwright install --with-deps chromium
+
+      # Playwright starts the production server itself, see webServer in
+      # playwright.config.ts. Provider routes are stubbed in the specs, so
+      # this never reaches a free endpoint or spends a daily quota.
+      - name: Build
+        run: npm run build
+
+      - name: Run the suite
+        run: npm run e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
   commit-style:
     name: Commit messages
     runs-on: ubuntu-latest

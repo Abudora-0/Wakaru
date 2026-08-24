@@ -60,6 +60,7 @@ because every provider works anonymously. Open http://localhost:3000.
 npm run dev          # the web app on port 3000
 npm test             # unit tests, no network, no quota spent
 npm run test:live    # hits the real providers, run this deliberately
+npm run e2e          # end to end, against a production build
 npm run check        # house style, types and tests
 npm run ext:build    # build the browser extension
 npm run brand:build  # regenerate every icon from brand/*.svg
@@ -191,6 +192,9 @@ scratch:
   country, not a language, and choosing one for Arabic or Spanish would be a
   political statement.
 - **Loading is a screentone shimmer**, never a spinner.
+- **Ctrl and K opens a command palette** that jumps to any page, finds any of
+  the 107 languages, or defines whatever you type. It is a real modal dialog:
+  it takes focus, traps it, and hands it back to whatever opened it.
 - Radius never exceeds 4px. The seal is the only round object in the system.
 
 Two themes: Paper and Night Ink. Both are explicit, so a chosen theme beats the
@@ -269,7 +273,9 @@ no `Co-Authored-By` trailer, no generated-with footer.
 
 **Tests never touch the network.** `npm test` runs against recorded fixtures so
 it cannot fail because a free provider is down and cannot spend a daily quota.
-Live provider checks live in `*.live.test.ts` behind `npm run test:live`.
+The end to end suite stubs the provider routes for the same reason. Anything
+that genuinely needs a live endpoint is quarantined: `*.live.test.ts` behind
+`npm run test:live`, and specs tagged `@live` behind `npm run e2e:live`.
 
 ## Roadmap
 

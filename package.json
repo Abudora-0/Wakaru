@@ -21,9 +21,15 @@
     "check:emdash": "node scripts/check-no-emdash.mjs",
     "check": "npm run check:emdash && npm run typecheck && npm run test",
     "brand:build": "node scripts/build-brand-assets.mjs",
-    "test:live": "vitest run --config vitest.live.config.ts"
+    "test:live": "vitest run --config vitest.live.config.ts",
+    "e2e": "playwright test",
+    "e2e:live": "playwright test --grep @live",
+    "e2e:ui": "playwright test --ui",
+    "e2e:report": "playwright show-report",
+    "check:all": "npm run check && npm run build && npm run e2e"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/node": "^24.3.0",
     "sharp": "^0.35.3",
     "typescript": "^5.9.2",

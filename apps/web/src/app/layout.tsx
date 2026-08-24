@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import { CommandPalette } from "@/components/CommandPalette";
 import { Wordmark } from "@/components/Logo";
 import "./globals.css";
 
@@ -63,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <Wordmark />
               </Link>
               <Nav />
+              <CommandPalette />
               <ThemeToggle />
             </div>
           </header>

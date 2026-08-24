@@ -215,6 +215,47 @@ h1, h2, h3, h4 {
   color: var(--wk-text-muted);
 }
 
+/*
+ * The masthead is a single row of brand, navigation, palette and theme, which
+ * adds up to more than a phone is wide. Rather than shrinking any of it, the
+ * navigation drops to a second line under its own rule, the way a printed
+ * masthead carries a second deck.
+ */
+@media (max-width: 760px) {
+  .masthead__inner {
+    flex-wrap: wrap;
+    row-gap: var(--wk-s-2);
+    padding-block: var(--wk-s-2);
+  }
+
+  .masthead__brand {
+    flex: 0 1 auto;
+  }
+
+  .palette-hint {
+    margin-inline-start: auto;
+  }
+
+  .masthead__nav {
+    order: 3;
+    width: 100%;
+    margin-inline-start: 0;
+    padding-top: var(--wk-s-2);
+    border-top: 1px solid var(--wk-rule-soft);
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .masthead__nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .navlink {
+    padding-inline: var(--wk-s-2);
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 640px) {
   .shell { padding-inline: var(--wk-s-4); }
   .masthead__tagline { display: none; }

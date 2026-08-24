@@ -45,3 +45,7 @@ desktop.ini
 # logs
 *.log
 npm-debug.log*
+
+# playwright
+/playwright/.cache/
+/blob-report/
