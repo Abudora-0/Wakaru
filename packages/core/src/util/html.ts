@@ -91,3 +91,13 @@ export function looksLikeProse(text: string, maxLen = 600): boolean {
   if (/^https?:\/\//i.test(text)) return false;
   return true;
 }
+
+/**
+ * Escape a string for safe use inside a regular expression.
+ *
+ * Exported because the interface needs it too, for highlighting the terms the
+ * dialect layer rewrote, and one implementation is better than two.
+ */
+export function escapeRegExp(input: string): string {
+  return input.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}

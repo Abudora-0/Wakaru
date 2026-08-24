@@ -1,6 +1,6 @@
-import type { Pronunciation } from "../types.js";
-import { fetchJson } from "../util/http.js";
-import { baseOf } from "../dialects/index.js";
+import type { Pronunciation } from "../types";
+import { fetchJson } from "../util/http";
+import { baseOf } from "../dialects/index";
 
 interface ImageInfoResponse {
   query?: {

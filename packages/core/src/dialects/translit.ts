@@ -12,7 +12,7 @@
  *   so rather than presenting a guess as a fact.
  */
 
-import { devanagariToLatin } from "./indic.js";
+import { devanagariToLatin } from "./indic";
 
 export interface TranslitRuleSet {
   id: string;

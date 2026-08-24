@@ -1,4 +1,4 @@
-import type { DialectDefinition } from "./types.js";
+import type { DialectDefinition } from "./types";
 
 /**
  * Curated dialect registry.

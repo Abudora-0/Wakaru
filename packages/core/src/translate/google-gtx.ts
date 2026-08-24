@@ -1,6 +1,6 @@
-import { ProviderError } from "../types.js";
-import type { ProviderTranslation, TranslateProvider, TranslationRequest } from "../types.js";
-import { fetchText } from "../util/http.js";
+import { ProviderError } from "../types";
+import type { ProviderTranslation, TranslateProvider, TranslationRequest } from "../types";
+import { fetchText } from "../util/http";
 
 /**
  * The undocumented endpoint that Google Translate's own web client calls.

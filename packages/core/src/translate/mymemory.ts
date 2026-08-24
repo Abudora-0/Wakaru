@@ -1,6 +1,6 @@
-import { ProviderError } from "../types.js";
-import type { ProviderTranslation, TranslateProvider, TranslationRequest } from "../types.js";
-import { fetchJson } from "../util/http.js";
+import { ProviderError } from "../types";
+import type { ProviderTranslation, TranslateProvider, TranslationRequest } from "../types";
+import { fetchJson } from "../util/http";
 
 interface MyMemoryResponse {
   responseData?: { translatedText?: string; match?: number };

@@ -1,4 +1,4 @@
-import type { Direction, LangCode, ScriptCode } from "../types.js";
+import type { Direction, LangCode, ScriptCode } from "../types";
 
 /**
  * One substitution applied after translation.

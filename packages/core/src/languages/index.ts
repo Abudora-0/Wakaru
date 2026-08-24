@@ -1,7 +1,7 @@
-import type { Direction, LangCode, ScriptCode } from "../types.js";
-import { LANGUAGE_ROWS } from "./data.js";
-import { dialectsFor } from "../dialects/index.js";
-import type { DialectDefinition } from "../dialects/types.js";
+import type { Direction, LangCode, ScriptCode } from "../types";
+import { LANGUAGE_ROWS } from "./data";
+import { dialectsFor } from "../dialects/index";
+import type { DialectDefinition } from "../dialects/types";
 
 export interface Language {
   code: LangCode;
@@ -129,4 +129,4 @@ export function totalDialectCount(): number {
   return LANGUAGES.reduce((sum, lang) => sum + lang.dialects.length, 0);
 }
 
-export { LANGUAGE_ROWS } from "./data.js";
+export { LANGUAGE_ROWS } from "./data";

@@ -1,14 +1,14 @@
-import type { TranslateProvider } from "../types.js";
-import { createMyMemoryProvider } from "./mymemory.js";
-import { createLibreTranslateProvider } from "./libretranslate.js";
-import { createGoogleGtxProvider } from "./google-gtx.js";
-import { TranslateChain } from "./chain.js";
+import type { TranslateProvider } from "../types";
+import { createMyMemoryProvider } from "./mymemory";
+import { createLibreTranslateProvider } from "./libretranslate";
+import { createGoogleGtxProvider } from "./google-gtx";
+import { TranslateChain } from "./chain";
 
-export { TranslateChain } from "./chain.js";
-export type { ChainTranslateRequest, TranslateChainOptions } from "./chain.js";
-export { createMyMemoryProvider, segmentText } from "./mymemory.js";
-export { createLibreTranslateProvider, fetchLibreTranslateLanguages } from "./libretranslate.js";
-export { createGoogleGtxProvider } from "./google-gtx.js";
+export { TranslateChain } from "./chain";
+export type { ChainTranslateRequest, TranslateChainOptions } from "./chain";
+export { createMyMemoryProvider, segmentText } from "./mymemory";
+export { createLibreTranslateProvider, fetchLibreTranslateLanguages } from "./libretranslate";
+export { createGoogleGtxProvider } from "./google-gtx";
 
 export interface TranslateSetup {
   /** Base URL of a self hosted LibreTranslate, if one is running. */

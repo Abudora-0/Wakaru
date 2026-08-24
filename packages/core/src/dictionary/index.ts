@@ -1,14 +1,14 @@
-import type { DictionaryProvider } from "../types.js";
-import { createDictionaryApiDevProvider } from "./dictionaryapi-dev.js";
-import { createWiktionaryProvider } from "./wiktionary.js";
-import { DictionaryChain } from "./chain.js";
+import type { DictionaryProvider } from "../types";
+import { createDictionaryApiDevProvider } from "./dictionaryapi-dev";
+import { createWiktionaryProvider } from "./wiktionary";
+import { DictionaryChain } from "./chain";
 
-export { DictionaryChain } from "./chain.js";
-export type { DictionaryChainOptions } from "./chain.js";
-export { createDictionaryApiDevProvider } from "./dictionaryapi-dev.js";
-export { createWiktionaryProvider, findLanguagesForWord } from "./wiktionary.js";
-export { fetchWiktionaryAudio } from "./wiktionary-audio.js";
-export { fetchRelatedWords, DATAMUSE_ATTRIBUTION } from "./datamuse.js";
+export { DictionaryChain } from "./chain";
+export type { DictionaryChainOptions } from "./chain";
+export { createDictionaryApiDevProvider } from "./dictionaryapi-dev";
+export { createWiktionaryProvider, findLanguagesForWord } from "./wiktionary";
+export { fetchWiktionaryAudio } from "./wiktionary-audio";
+export { fetchRelatedWords, DATAMUSE_ATTRIBUTION } from "./datamuse";
 
 export function createDictionaryProviders(): DictionaryProvider[] {
   return [createDictionaryApiDevProvider(), createWiktionaryProvider()];

@@ -1,10 +1,10 @@
-import { ProviderError } from "../types.js";
-import type { Attribution, DictionaryProvider, LangCode, Pronunciation, Sense, UnifiedEntry } from "../types.js";
-import { Lru } from "../util/lru.js";
-import { directionOf, scriptOf } from "../languages/index.js";
-import { baseOf } from "../dialects/index.js";
-import { fetchWiktionaryAudio } from "./wiktionary-audio.js";
-import { DATAMUSE_ATTRIBUTION, fetchRelatedWords } from "./datamuse.js";
+import { ProviderError } from "../types";
+import type { Attribution, DictionaryProvider, LangCode, Pronunciation, Sense, UnifiedEntry } from "../types";
+import { Lru } from "../util/lru";
+import { directionOf, scriptOf } from "../languages/index";
+import { baseOf } from "../dialects/index";
+import { fetchWiktionaryAudio } from "./wiktionary-audio";
+import { DATAMUSE_ATTRIBUTION, fetchRelatedWords } from "./datamuse";
 
 export interface DictionaryChainOptions {
   providers: DictionaryProvider[];

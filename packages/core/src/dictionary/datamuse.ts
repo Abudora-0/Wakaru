@@ -1,4 +1,4 @@
-import { fetchJson } from "../util/http.js";
+import { fetchJson } from "../util/http";
 
 interface DatamuseWord {
   word: string;

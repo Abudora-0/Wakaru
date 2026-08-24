@@ -1,5 +1,5 @@
-import type { LangCode } from "../types.js";
-import { ttsLocalesFor } from "../dialects/index.js";
+import type { LangCode } from "../types";
+import { ttsLocalesFor } from "../dialects/index";
 
 /**
  * Voice pronunciation through the browser's own speech synthesiser.

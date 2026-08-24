@@ -1,5 +1,5 @@
-import type { DictionaryProvider, Pronunciation, Sense, UnifiedEntry } from "../types.js";
-import { fetchJson } from "../util/http.js";
+import type { DictionaryProvider, Pronunciation, Sense, UnifiedEntry } from "../types";
+import { fetchJson } from "../util/http";
 
 interface DevEntry {
   word?: string;

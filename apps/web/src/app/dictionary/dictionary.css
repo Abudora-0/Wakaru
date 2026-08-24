@@ -1,0 +1,265 @@
+/*
+ * The dictionary entry is set as a printed page: a ruled outer margin, a
+ * running head, an oversized headword with its reading above it, and the
+ * source attribution stamped into the margin where a printer's mark would go.
+ */
+
+.entry {
+  display: grid;
+  grid-template-columns: 190px minmax(0, 1fr);
+  gap: var(--wk-s-8);
+  align-items: start;
+}
+
+/* ------------------------------------------------------------- the margin */
+
+.margin {
+  position: sticky;
+  top: var(--wk-s-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-s-4);
+  padding-inline-end: var(--wk-s-4);
+  border-inline-end: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.margin__block {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-s-1);
+}
+
+.margin__label {
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+.margin__value {
+  font-size: var(--wk-t-sm);
+}
+
+/* The source stamp. Wiktionary is CC BY-SA, so this is a licence obligation
+ * rather than a nicety, and it is designed to look deliberate. */
+.stamp {
+  padding: var(--wk-s-2);
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  line-height: 1.5;
+  color: var(--wk-seal);
+  border: 2px solid var(--wk-seal);
+  border-radius: var(--wk-r-1);
+  transform: rotate(-1.6deg);
+}
+
+.stamp a {
+  color: inherit;
+}
+
+/* --------------------------------------------------------------- headword */
+
+.headword {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: var(--wk-s-4);
+  padding-bottom: var(--wk-s-4);
+  border-bottom: var(--wk-rule-w-heavy) solid var(--wk-rule);
+}
+
+.headword__ruby {
+  display: block;
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-md);
+  line-height: 1;
+  color: var(--wk-seal);
+  margin-bottom: var(--wk-s-1);
+}
+
+.headword__word {
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-head);
+  line-height: 0.95;
+  letter-spacing: var(--wk-track-tight);
+}
+
+.headword__tools {
+  display: flex;
+  align-items: center;
+  gap: var(--wk-s-2);
+  margin-inline-start: auto;
+}
+
+/* IPA is set in a boxed slug, the way a dictionary sets its pronunciation. */
+.ipa {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wk-s-2);
+  padding: 3px var(--wk-s-2);
+  font-family: var(--wk-font-ipa);
+  font-size: var(--wk-t-md);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  background-color: var(--wk-surface-raised);
+}
+
+.ipa__accent {
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+.pronunciations {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-2);
+  margin-top: var(--wk-s-4);
+}
+
+/* ----------------------------------------------------------------- senses */
+
+.senses {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: sense;
+}
+
+.sense {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  gap: var(--wk-s-3);
+  padding-block: var(--wk-s-5);
+  border-bottom: 1px solid var(--wk-rule-hair);
+}
+
+.sense::before {
+  counter-increment: sense;
+  content: counter(sense);
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-sm);
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-text);
+  border-radius: var(--wk-r-1);
+}
+
+.sense__pos {
+  display: inline-block;
+  margin-bottom: var(--wk-s-1);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-seal);
+}
+
+.sense__definition {
+  font-family: var(--wk-font-read);
+  font-size: var(--wk-t-md);
+  line-height: var(--wk-lh-read);
+  max-width: var(--wk-measure);
+}
+
+/* Examples sit in a balloon, tying the dictionary to the manga side. */
+.example {
+  position: relative;
+  margin-top: var(--wk-s-3);
+  padding: var(--wk-s-3) var(--wk-s-4);
+  font-family: var(--wk-font-read);
+  border-inline-start: 3px solid var(--wk-seal);
+  background-color: var(--wk-surface-sunk);
+}
+
+.example__text {
+  font-size: var(--wk-t-base);
+}
+
+.example__translation {
+  display: block;
+  margin-top: var(--wk-s-1);
+  font-size: var(--wk-t-sm);
+  color: var(--wk-text-muted);
+}
+
+/* ----------------------------------------------------- synonyms and forms */
+
+.wordset {
+  margin-top: var(--wk-s-6);
+}
+
+.wordset__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-2);
+  margin-top: var(--wk-s-3);
+}
+
+.wordset__item {
+  padding: var(--wk-s-1) var(--wk-s-3);
+  font-size: var(--wk-t-sm);
+  text-decoration: none;
+  border: 1px solid var(--wk-rule-soft);
+  border-radius: var(--wk-r-1);
+}
+
+.wordset__item:hover {
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+  border-color: var(--wk-rule);
+}
+
+/* --------------------------------------------------------- search landing */
+
+.hunt {
+  max-width: 720px;
+}
+
+.hunt__row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-3);
+  align-items: flex-end;
+  margin-block: var(--wk-s-5);
+}
+
+.hunt__field {
+  flex: 1 1 260px;
+  min-width: 0;
+}
+
+.hunt__lang {
+  flex: 0 1 260px;
+}
+
+.suggest {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-2);
+  margin-top: var(--wk-s-4);
+}
+
+@media (max-width: 860px) {
+  .entry {
+    grid-template-columns: 1fr;
+    gap: var(--wk-s-5);
+  }
+
+  .margin {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: var(--wk-s-5);
+    padding-inline-end: 0;
+    padding-bottom: var(--wk-s-4);
+    border-inline-end: 0;
+    border-bottom: var(--wk-rule-w) solid var(--wk-rule);
+  }
+}

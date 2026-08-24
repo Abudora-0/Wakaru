@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
-import { applyDialect, baseOf, dialectsFor, getDialect, providerLocaleFor, ttsLocalesFor } from "./index.js";
-import { transliterate } from "./translit.js";
+import { applyDialect, baseOf, dialectsFor, getDialect, providerLocaleFor, ttsLocalesFor } from "./index";
+import { transliterate } from "./translit";
 
 describe("dialect registry", () => {
   it("resolves a dialect back to its base language", () => {

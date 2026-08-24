@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
-import { createTranslateChain } from "../translate/index.js";
-import { createDictionaryChain } from "../dictionary/index.js";
-import { findLanguagesForWord } from "../dictionary/wiktionary.js";
+import { createTranslateChain } from "../translate/index";
+import { createDictionaryChain } from "../dictionary/index";
+import { findLanguagesForWord } from "../dictionary/wiktionary";
 
 /**
  * Live checks against the real free endpoints.

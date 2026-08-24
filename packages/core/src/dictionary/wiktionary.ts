@@ -1,8 +1,8 @@
-import type { DictionaryProvider, Example, Sense, UnifiedEntry } from "../types.js";
-import { fetchJson } from "../util/http.js";
-import { extractExample, looksLikeProse, stripWikiHtml } from "../util/html.js";
-import { directionOf, scriptOf } from "../languages/index.js";
-import { baseOf } from "../dialects/index.js";
+import type { DictionaryProvider, Example, Sense, UnifiedEntry } from "../types";
+import { fetchJson } from "../util/http";
+import { extractExample, looksLikeProse, stripWikiHtml } from "../util/html";
+import { directionOf, scriptOf } from "../languages/index";
+import { baseOf } from "../dialects/index";
 
 /**
  * The REST endpoint keys its result by language code, so one lookup of a word

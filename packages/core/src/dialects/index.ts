@@ -1,11 +1,11 @@
-import type { DialectEdit, LangCode } from "../types.js";
-import { DIALECTS } from "./data.js";
-import type { DialectDefinition, LexiconEntry } from "./types.js";
-import { getRuleSet, transliterate } from "./translit.js";
+import type { DialectEdit, LangCode } from "../types";
+import { DIALECTS } from "./data";
+import type { DialectDefinition, LexiconEntry } from "./types";
+import { getRuleSet, transliterate } from "./translit";
 
-export type { DialectDefinition, LexiconEntry } from "./types.js";
-export { DIALECTS } from "./data.js";
-export { RULE_SETS, getRuleSet, transliterate } from "./translit.js";
+export type { DialectDefinition, LexiconEntry } from "./types";
+export { DIALECTS } from "./data";
+export { RULE_SETS, getRuleSet, transliterate } from "./translit";
 
 const BY_CODE = new Map<LangCode, DialectDefinition>(DIALECTS.map((d) => [d.code, d]));
 

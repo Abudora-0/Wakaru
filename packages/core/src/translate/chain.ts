@@ -1,8 +1,8 @@
-import { ProviderError } from "../types.js";
-import type { Attribution, LangCode, TranslateProvider, TranslationRequest, TranslationResult } from "../types.js";
-import { Lru } from "../util/lru.js";
-import { applyDialect, getDialect, providerLocaleFor } from "../dialects/index.js";
-import { scriptOf } from "../languages/index.js";
+import { ProviderError } from "../types";
+import type { Attribution, LangCode, TranslateProvider, TranslationRequest, TranslationResult } from "../types";
+import { Lru } from "../util/lru";
+import { applyDialect, getDialect, providerLocaleFor } from "../dialects/index";
+import { scriptOf } from "../languages/index";
 
 /**
  * How many consecutive failures put a provider on the bench, and for how long.

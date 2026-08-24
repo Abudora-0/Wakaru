@@ -6,32 +6,32 @@
  * and dialect rules rather than two implementations that drift apart.
  */
 
-export * from "./types.js";
+export * from "./types";
 
-export { LANGUAGES, getLanguage, isSupported, directionOf, scriptOf, searchLanguages, groupByScript, totalDialectCount } from "./languages/index.js";
-export type { Language } from "./languages/index.js";
+export { LANGUAGES, getLanguage, isSupported, directionOf, scriptOf, searchLanguages, groupByScript, totalDialectCount } from "./languages/index";
+export type { Language } from "./languages/index";
 
 export {
   DIALECTS, RULE_SETS, applyDialect, baseOf, dialectsFor, getDialect, getRuleSet,
   hasDialects, providerLocaleFor, transliterate, ttsLocalesFor,
-} from "./dialects/index.js";
-export type { DialectApplication } from "./dialects/index.js";
-export type { DialectDefinition, LexiconEntry } from "./dialects/types.js";
+} from "./dialects/index";
+export type { DialectApplication } from "./dialects/index";
+export type { DialectDefinition, LexiconEntry } from "./dialects/types";
 
 export {
   TranslateChain, createTranslateChain, createTranslateProviders, translateSetupFromEnv,
   createMyMemoryProvider, createLibreTranslateProvider, createGoogleGtxProvider, segmentText,
-} from "./translate/index.js";
-export type { ChainTranslateRequest, TranslateSetup } from "./translate/index.js";
+} from "./translate/index";
+export type { ChainTranslateRequest, TranslateSetup } from "./translate/index";
 
 export {
   DictionaryChain, createDictionaryChain, createDictionaryProviders,
   createDictionaryApiDevProvider, createWiktionaryProvider,
   findLanguagesForWord, fetchWiktionaryAudio, fetchRelatedWords,
-} from "./dictionary/index.js";
+} from "./dictionary/index";
 
-export { speak, stopSpeaking, matchVoice, loadVoices, speechSupported } from "./speech/index.js";
-export type { SpeakOptions, SpeakOutcome, VoiceMatch } from "./speech/index.js";
+export { speak, stopSpeaking, matchVoice, loadVoices, speechSupported } from "./speech/index";
+export type { SpeakOptions, SpeakOutcome, VoiceMatch } from "./speech/index";
 
-export { Lru } from "./util/lru.js";
-export { stripWikiHtml, extractExample } from "./util/html.js";
+export { Lru } from "./util/lru";
+export { stripWikiHtml, extractExample, escapeRegExp } from "./util/html";

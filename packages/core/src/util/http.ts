@@ -1,4 +1,4 @@
-import { ProviderError } from "../types.js";
+import { ProviderError } from "../types";
 
 export interface FetchJsonOptions {
   provider: string;

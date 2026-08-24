@@ -1,0 +1,228 @@
+/*
+ * The translator is set as an open book: two pages with a visible spine
+ * between them and the seal sitting in the gutter. On a narrow screen the
+ * spread folds into stacked panels rather than shrinking the columns.
+ */
+
+.spread {
+  display: grid;
+  grid-template-columns: 1fr 92px 1fr;
+  align-items: stretch;
+  border: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  box-shadow: var(--wk-shadow-lg);
+  background-color: var(--wk-surface);
+}
+
+.leaf {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-s-3);
+  padding: var(--wk-s-5);
+  min-width: 0;
+}
+
+.leaf--target {
+  background-color: var(--wk-surface-sunk);
+}
+
+.leaf__head {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--wk-s-3);
+}
+
+.leaf__head > :first-child {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+/* The gutter. The spine shading is drawn, not an image. */
+.gutter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wk-s-3);
+  padding-block: var(--wk-s-5);
+  border-inline: var(--wk-rule-w) solid var(--wk-rule);
+  background-image: linear-gradient(
+    to right,
+    transparent 0,
+    var(--wk-rule-hair) 42%,
+    var(--wk-rule-soft) 50%,
+    var(--wk-rule-hair) 58%,
+    transparent 100%
+  );
+}
+
+.composer {
+  flex: 1 1 auto;
+  min-height: 190px;
+  width: 100%;
+  font-family: var(--wk-font-read);
+  resize: vertical;
+}
+
+/* The rendered translation, set for reading rather than for editing. */
+.rendered {
+  flex: 1 1 auto;
+  min-height: 190px;
+  padding: var(--wk-s-3);
+  font-family: var(--wk-font-read);
+  font-size: var(--wk-t-lg);
+  line-height: var(--wk-lh-read);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  border: var(--wk-rule-w) solid var(--wk-rule-soft);
+  background-color: var(--wk-surface-raised);
+}
+
+.rendered:empty::before {
+  content: attr(data-placeholder);
+  color: var(--wk-text-muted);
+  font-size: var(--wk-t-base);
+}
+
+/* A word the dialect layer rewrote, marked so the change is visible. */
+.edit {
+  padding: 0 2px;
+  background-color: var(--wk-seal-wash);
+  border-bottom: 2px solid var(--wk-seal);
+  cursor: help;
+}
+
+.leaf__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--wk-s-2);
+  min-height: 34px;
+}
+
+.counter {
+  margin-inline-start: auto;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  color: var(--wk-text-muted);
+}
+
+.counter--over {
+  color: var(--wk-seal);
+  font-weight: 700;
+}
+
+/* Dialect chips sit directly under the language they refine. */
+.dialects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-1);
+  min-height: 26px;
+}
+
+/* Provider and status line under the spread. */
+.ledger {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-2) var(--wk-s-4);
+  align-items: center;
+  margin-top: var(--wk-s-3);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: 0.04em;
+  color: var(--wk-text-muted);
+}
+
+.ledger__stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wk-s-1);
+  padding: 2px var(--wk-s-2);
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+  border: 1px solid var(--wk-rule);
+  text-transform: uppercase;
+}
+
+.notice {
+  margin-top: var(--wk-s-3);
+  padding: var(--wk-s-3) var(--wk-s-4);
+  font-size: var(--wk-t-sm);
+  border: var(--wk-rule-w) solid var(--wk-seal);
+  background-color: var(--wk-seal-wash);
+}
+
+.notice--quiet {
+  border-color: var(--wk-rule-soft);
+  background-color: transparent;
+  color: var(--wk-text-muted);
+}
+
+/* The edit ledger, listing exactly what the dialect overlay changed. */
+.edits {
+  margin-top: var(--wk-s-4);
+}
+
+.edits__list {
+  display: grid;
+  gap: var(--wk-s-1);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.edits__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--wk-s-2);
+  padding: var(--wk-s-2) var(--wk-s-3);
+  font-size: var(--wk-t-sm);
+  border: 1px solid var(--wk-rule-hair);
+  background-color: var(--wk-surface-raised);
+}
+
+.edits__from {
+  text-decoration: line-through;
+  color: var(--wk-text-muted);
+}
+
+.edits__to {
+  font-weight: 700;
+  color: var(--wk-seal);
+}
+
+.edits__note {
+  flex: 1 1 100%;
+  font-size: var(--wk-t-xs);
+  color: var(--wk-text-muted);
+}
+
+.edits__conf {
+  margin-inline-start: auto;
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+@media (max-width: 900px) {
+  .spread {
+    grid-template-columns: 1fr;
+  }
+
+  .gutter {
+    flex-direction: row;
+    padding: var(--wk-s-4);
+    border-inline: 0;
+    border-block: var(--wk-rule-w) solid var(--wk-rule);
+    background-image: linear-gradient(
+      to bottom,
+      transparent 0,
+      var(--wk-rule-hair) 42%,
+      var(--wk-rule-soft) 50%,
+      var(--wk-rule-hair) 58%,
+      transparent 100%
+    );
+  }
+}
