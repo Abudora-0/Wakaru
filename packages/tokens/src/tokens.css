@@ -1,0 +1,229 @@
+/*
+ * Wakaru: Sumi Press design tokens
+ *
+ * The system is built on ink, paper and print. Three rules hold it together:
+ *   1. Radius never exceeds 4px. The only round object is the seal.
+ *   2. Shadows are solid offsets with zero blur. Objects sit on the page,
+ *      they do not float above it.
+ *   3. Vermilion is the only accent. It marks actions and nothing else.
+ *
+ * Light theme is "Paper". Dark theme is "Night Ink".
+ */
+
+:root {
+  /* ---- raw palette, do not consume directly in components ---- */
+  --wk-raw-paper: #f4efe6;
+  --wk-raw-paper-2: #eae2d4;
+  --wk-raw-paper-3: #ded3c0;
+  --wk-raw-ink: #14110f;
+  --wk-raw-ink-2: #3a332c;
+  --wk-raw-ink-3: #6b6156;
+  --wk-raw-vermilion: #d8412f;
+  --wk-raw-vermilion-deep: #a82f21;
+  --wk-raw-indigo: #2b3a67;
+  --wk-raw-jade: #2e6e57;
+  --wk-raw-amber: #c9812f;
+
+  --wk-raw-night: #0e0d0c;
+  --wk-raw-night-2: #171512;
+  --wk-raw-night-3: #241f1a;
+  --wk-raw-bone: #ede6d9;
+  --wk-raw-bone-2: #bdb3a4;
+  --wk-raw-bone-3: #8a8074;
+  --wk-raw-vermilion-lift: #e4553f;
+
+  /* ---- semantic surfaces ---- */
+  --wk-bg: var(--wk-raw-paper);
+  --wk-surface: #fbf8f2;
+  --wk-surface-sunk: var(--wk-raw-paper-2);
+  --wk-surface-raised: #ffffff;
+
+  /* ---- semantic text ---- */
+  --wk-text: var(--wk-raw-ink);
+  --wk-text-soft: var(--wk-raw-ink-2);
+  --wk-text-muted: var(--wk-raw-ink-3);
+  --wk-text-on-seal: var(--wk-raw-paper);
+  --wk-text-on-ink: var(--wk-raw-paper);
+
+  /* ---- accent and status ---- */
+  --wk-seal: var(--wk-raw-vermilion);
+  --wk-seal-deep: var(--wk-raw-vermilion-deep);
+  --wk-seal-wash: rgba(216, 65, 47, 0.1);
+  --wk-indigo: var(--wk-raw-indigo);
+  --wk-indigo-wash: rgba(43, 58, 103, 0.1);
+  --wk-ok: var(--wk-raw-jade);
+  --wk-ok-wash: rgba(46, 110, 87, 0.12);
+  --wk-warn: var(--wk-raw-amber);
+  --wk-warn-wash: rgba(201, 129, 47, 0.14);
+  --wk-danger: var(--wk-raw-vermilion-deep);
+
+  /* ---- lines ---- */
+  --wk-rule: var(--wk-raw-ink);
+  --wk-rule-soft: rgba(20, 17, 15, 0.22);
+  --wk-rule-hair: rgba(20, 17, 15, 0.1);
+  --wk-rule-w: 2px;
+  --wk-rule-w-heavy: 3px;
+
+  /* ---- solid offset shadows, never blurred ---- */
+  --wk-shadow-color: var(--wk-raw-ink);
+  --wk-shadow-sm: 2px 2px 0 var(--wk-shadow-color);
+  --wk-shadow: 4px 4px 0 var(--wk-shadow-color);
+  --wk-shadow-lg: 7px 7px 0 var(--wk-shadow-color);
+  --wk-shadow-seal: 3px 3px 0 var(--wk-seal-deep);
+
+  /* ---- screentone dot texture ---- */
+  --wk-tone-dot: rgba(20, 17, 15, 0.16);
+  --wk-tone-size: 6px;
+  --wk-tone-r: 1.1px;
+
+  /* ---- radius, deliberately near zero ---- */
+  --wk-r-0: 0px;
+  --wk-r-1: 2px;
+  --wk-r-2: 3px;
+  --wk-r-3: 4px;
+  --wk-r-seal: 999px;
+
+  /* ---- 4px spacing scale ---- */
+  --wk-s-1: 4px;
+  --wk-s-2: 8px;
+  --wk-s-3: 12px;
+  --wk-s-4: 16px;
+  --wk-s-5: 20px;
+  --wk-s-6: 24px;
+  --wk-s-8: 32px;
+  --wk-s-10: 40px;
+  --wk-s-12: 48px;
+  --wk-s-16: 64px;
+  --wk-s-20: 80px;
+
+  /* ---- type families ---- */
+  --wk-font-display: "Zen Antique", "Shippori Mincho", Georgia, "Times New Roman", serif;
+  --wk-font-read: "Newsreader", Georgia, "Iowan Old Style", "Times New Roman", serif;
+  --wk-font-ui: "Zen Kaku Gothic New", "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --wk-font-ipa: "Gentium Plus", "Charis SIL", "Doulos SIL", "Noto Serif", serif;
+  --wk-font-mono: "JetBrains Mono", ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, monospace;
+
+  /* ---- type scale ---- */
+  --wk-t-xs: 0.6875rem;
+  --wk-t-sm: 0.8125rem;
+  --wk-t-base: 0.9375rem;
+  --wk-t-md: 1.0625rem;
+  --wk-t-lg: 1.375rem;
+  --wk-t-xl: 1.875rem;
+  --wk-t-2xl: 2.5rem;
+  --wk-t-3xl: 3.5rem;
+  --wk-t-head: clamp(2.75rem, 7vw, 5rem);
+
+  --wk-lh-tight: 1.1;
+  --wk-lh-snug: 1.3;
+  --wk-lh-read: 1.65;
+
+  --wk-track-tight: -0.01em;
+  --wk-track-wide: 0.08em;
+  --wk-track-caps: 0.16em;
+
+  /* ---- control sizing ---- */
+  --wk-control-h: 42px;
+  --wk-control-h-sm: 32px;
+  --wk-control-h-lg: 52px;
+  --wk-scrollbar-w: 14px;
+
+  /* ---- motion ---- */
+  --wk-dur-1: 90ms;
+  --wk-dur-2: 160ms;
+  --wk-dur-3: 260ms;
+  --wk-dur-4: 420ms;
+  --wk-ease-stamp: cubic-bezier(0.2, 0.9, 0.25, 1.2);
+  --wk-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --wk-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* ---- layering ---- */
+  --wk-z-base: 0;
+  --wk-z-sticky: 10;
+  --wk-z-overlay: 100;
+  --wk-z-popover: 200;
+  --wk-z-modal: 300;
+  --wk-z-toast: 400;
+
+  /* ---- reading measure ---- */
+  --wk-measure: 66ch;
+  --wk-measure-narrow: 44ch;
+
+  color-scheme: light;
+}
+
+/*
+ * Night Ink. The explicit attribute wins in both directions so a user toggle
+ * always beats the operating system preference.
+ */
+:root[data-theme="dark"] {
+  --wk-bg: var(--wk-raw-night);
+  --wk-surface: var(--wk-raw-night-2);
+  --wk-surface-sunk: #0a0908;
+  --wk-surface-raised: var(--wk-raw-night-3);
+
+  --wk-text: var(--wk-raw-bone);
+  --wk-text-soft: var(--wk-raw-bone-2);
+  --wk-text-muted: var(--wk-raw-bone-3);
+  --wk-text-on-seal: #fff6ef;
+  --wk-text-on-ink: var(--wk-raw-bone);
+
+  --wk-seal: var(--wk-raw-vermilion-lift);
+  --wk-seal-deep: #b83a28;
+  --wk-seal-wash: rgba(228, 85, 63, 0.14);
+  --wk-indigo: #7b90cf;
+  --wk-indigo-wash: rgba(123, 144, 207, 0.14);
+  --wk-ok: #57b48e;
+  --wk-ok-wash: rgba(87, 180, 142, 0.14);
+  --wk-warn: #e0a44f;
+  --wk-warn-wash: rgba(224, 164, 79, 0.16);
+  --wk-danger: #e4553f;
+
+  --wk-rule: var(--wk-raw-bone);
+  --wk-rule-soft: rgba(237, 230, 217, 0.24);
+  --wk-rule-hair: rgba(237, 230, 217, 0.12);
+
+  --wk-shadow-color: #000000;
+  --wk-shadow-seal: 3px 3px 0 #6d2114;
+
+  --wk-tone-dot: rgba(237, 230, 217, 0.14);
+
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --wk-bg: var(--wk-raw-night);
+    --wk-surface: var(--wk-raw-night-2);
+    --wk-surface-sunk: #0a0908;
+    --wk-surface-raised: var(--wk-raw-night-3);
+
+    --wk-text: var(--wk-raw-bone);
+    --wk-text-soft: var(--wk-raw-bone-2);
+    --wk-text-muted: var(--wk-raw-bone-3);
+    --wk-text-on-seal: #fff6ef;
+    --wk-text-on-ink: var(--wk-raw-bone);
+
+    --wk-seal: var(--wk-raw-vermilion-lift);
+    --wk-seal-deep: #b83a28;
+    --wk-seal-wash: rgba(228, 85, 63, 0.14);
+    --wk-indigo: #7b90cf;
+    --wk-indigo-wash: rgba(123, 144, 207, 0.14);
+    --wk-ok: #57b48e;
+    --wk-ok-wash: rgba(87, 180, 142, 0.14);
+    --wk-warn: #e0a44f;
+    --wk-warn-wash: rgba(224, 164, 79, 0.16);
+    --wk-danger: #e4553f;
+
+    --wk-rule: var(--wk-raw-bone);
+    --wk-rule-soft: rgba(237, 230, 217, 0.24);
+    --wk-rule-hair: rgba(237, 230, 217, 0.12);
+
+    --wk-shadow-color: #000000;
+    --wk-shadow-seal: 3px 3px 0 #6d2114;
+
+    --wk-tone-dot: rgba(237, 230, 217, 0.14);
+
+    color-scheme: dark;
+  }
+}

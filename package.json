@@ -1,0 +1,34 @@
+{
+  "name": "wakaru",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Translator, multilingual dictionary and raw manga reader that runs entirely on free, keyless APIs.",
+  "license": "MIT",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "npm run dev --workspace @wakaru/web",
+    "build": "npm run build --workspace @wakaru/web",
+    "start": "npm run start --workspace @wakaru/web",
+    "ext:dev": "npm run dev --workspace @wakaru/extension",
+    "ext:build": "npm run build --workspace @wakaru/extension",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint .",
+    "typecheck": "tsc --build --force",
+    "check:emdash": "node scripts/check-no-emdash.mjs",
+    "check": "npm run check:emdash && npm run typecheck && npm run test",
+    "brand:build": "node scripts/build-brand-assets.mjs",
+    "test:live": "vitest run --config vitest.live.config.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=20.9.0"
+  }
+}

@@ -1,0 +1,47 @@
+# dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# builds
+dist/
+build/
+out/
+.next/
+.output/
+.wxt/
+*.tsbuildinfo
+
+# extension packages
+apps/extension/.output/
+web-ext-artifacts/
+*.zip
+*.xpi
+*.crx
+
+# generated brand raster output
+brand/dist/
+
+# env
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# test and coverage
+coverage/
+.vitest/
+playwright-report/
+test-results/
+
+# editor and os
+.vscode/*
+!.vscode/extensions.json
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# logs
+*.log
+npm-debug.log*

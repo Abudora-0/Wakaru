@@ -1,0 +1,761 @@
+/*
+ * Wakaru control primitives.
+ *
+ * Nothing here relies on a browser default appearance. Every control is drawn
+ * from scratch so the product reads as printed matter rather than as a form.
+ * Consumed by both the web app and the extension overlay.
+ *
+ * Everything is scoped under .wk-scope so the extension can inject these
+ * styles onto a third party page without bleeding into that page.
+ */
+
+/* ==========================================================================
+   1. Scrollbar. Square, screentone track, vermilion thumb with an ink border.
+   ========================================================================== */
+
+.wk-scope {
+  scrollbar-color: var(--wk-seal) var(--wk-surface-sunk);
+  scrollbar-width: auto;
+}
+
+.wk-scope ::-webkit-scrollbar,
+.wk-scope::-webkit-scrollbar {
+  width: var(--wk-scrollbar-w);
+  height: var(--wk-scrollbar-w);
+}
+
+.wk-scope ::-webkit-scrollbar-track,
+.wk-scope::-webkit-scrollbar-track {
+  background-color: var(--wk-surface-sunk);
+  background-image: radial-gradient(var(--wk-tone-dot) var(--wk-tone-r), transparent var(--wk-tone-r));
+  background-size: var(--wk-tone-size) var(--wk-tone-size);
+  border-left: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.wk-scope ::-webkit-scrollbar-track:horizontal,
+.wk-scope::-webkit-scrollbar-track:horizontal {
+  border-left: 0;
+  border-top: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.wk-scope ::-webkit-scrollbar-thumb,
+.wk-scope::-webkit-scrollbar-thumb {
+  background-color: var(--wk-seal);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: 0;
+}
+
+.wk-scope ::-webkit-scrollbar-thumb:hover,
+.wk-scope::-webkit-scrollbar-thumb:hover {
+  background-color: var(--wk-seal-deep);
+}
+
+.wk-scope ::-webkit-scrollbar-thumb:active,
+.wk-scope::-webkit-scrollbar-thumb:active {
+  background-color: var(--wk-text);
+}
+
+.wk-scope ::-webkit-scrollbar-corner,
+.wk-scope::-webkit-scrollbar-corner {
+  background-color: var(--wk-surface-sunk);
+}
+
+/* ==========================================================================
+   2. Selection and focus. The focus ring is loud on purpose.
+   ========================================================================== */
+
+.wk-scope ::selection {
+  background-color: var(--wk-seal);
+  color: var(--wk-text-on-seal);
+}
+
+.wk-scope :focus-visible {
+  outline: var(--wk-rule-w-heavy) solid var(--wk-seal);
+  outline-offset: 2px;
+  border-radius: var(--wk-r-1);
+}
+
+/* ==========================================================================
+   3. Button. A seal pressed into paper: the block travels into its own shadow
+      rather than lifting or glowing.
+   ========================================================================== */
+
+.wk-btn {
+  --btn-face: var(--wk-surface-raised);
+  --btn-text: var(--wk-text);
+  --btn-travel: 4px;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wk-s-2);
+
+  min-height: var(--wk-control-h);
+  padding: 0 var(--wk-s-5);
+
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-base);
+  font-weight: 700;
+  letter-spacing: var(--wk-track-wide);
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+
+  color: var(--btn-text);
+  background-color: var(--btn-face);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  box-shadow: var(--wk-shadow);
+
+  cursor: pointer;
+  appearance: none;
+  transition:
+    transform var(--wk-dur-1) var(--wk-ease-stamp),
+    box-shadow var(--wk-dur-1) var(--wk-ease-stamp),
+    background-color var(--wk-dur-2) linear;
+}
+
+.wk-btn:hover:not(:disabled) {
+  transform: translate(1px, 1px);
+  box-shadow: 3px 3px 0 var(--wk-shadow-color);
+}
+
+.wk-btn:active:not(:disabled) {
+  transform: translate(var(--btn-travel), var(--btn-travel));
+  box-shadow: 0 0 0 var(--wk-shadow-color);
+}
+
+.wk-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  box-shadow: var(--wk-shadow-sm);
+}
+
+.wk-btn--seal {
+  --btn-face: var(--wk-seal);
+  --btn-text: var(--wk-text-on-seal);
+}
+
+.wk-btn--ink {
+  --btn-face: var(--wk-text);
+  --btn-text: var(--wk-text-on-ink);
+}
+
+.wk-btn--quiet {
+  --btn-face: transparent;
+  box-shadow: none;
+  border-color: transparent;
+}
+
+.wk-btn--quiet:hover:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+  background-color: var(--wk-seal-wash);
+  border-color: var(--wk-rule-soft);
+}
+
+.wk-btn--sm {
+  --btn-travel: 3px;
+  min-height: var(--wk-control-h-sm);
+  padding: 0 var(--wk-s-3);
+  font-size: var(--wk-t-sm);
+}
+
+.wk-btn--lg {
+  min-height: var(--wk-control-h-lg);
+  padding: 0 var(--wk-s-8);
+  font-size: var(--wk-t-md);
+}
+
+/* The round hanko variant, the only circular object in the system. */
+.wk-seal-btn {
+  display: inline-grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+  border: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  border-radius: var(--wk-r-seal);
+  box-shadow: var(--wk-shadow);
+
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-lg);
+  line-height: 1;
+  cursor: pointer;
+  appearance: none;
+  transition:
+    transform var(--wk-dur-1) var(--wk-ease-stamp),
+    box-shadow var(--wk-dur-1) var(--wk-ease-stamp);
+}
+
+.wk-seal-btn:hover:not(:disabled) {
+  transform: translate(1px, 1px) rotate(-3deg);
+  box-shadow: 3px 3px 0 var(--wk-shadow-color);
+}
+
+.wk-seal-btn:active:not(:disabled) {
+  transform: translate(4px, 4px) rotate(-6deg);
+  box-shadow: 0 0 0 var(--wk-shadow-color);
+}
+
+.wk-seal-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.wk-seal-btn--sm {
+  width: 34px;
+  height: 34px;
+  font-size: var(--wk-t-base);
+  border-width: var(--wk-rule-w);
+}
+
+/* ==========================================================================
+   4. Fields. A manuscript ruled line, not a rounded pill.
+   ========================================================================== */
+
+.wk-field {
+  display: block;
+  width: 100%;
+  min-height: var(--wk-control-h);
+  padding: var(--wk-s-2) var(--wk-s-3);
+
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-md);
+  color: var(--wk-text);
+  caret-color: var(--wk-seal);
+
+  background-color: transparent;
+  border: 0;
+  border-bottom: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: 0;
+  appearance: none;
+  transition: border-color var(--wk-dur-2) linear, background-color var(--wk-dur-2) linear;
+}
+
+.wk-field::placeholder {
+  color: var(--wk-text-muted);
+  opacity: 1;
+}
+
+.wk-field:hover:not(:disabled) {
+  background-color: var(--wk-seal-wash);
+}
+
+.wk-field:focus {
+  outline: none;
+  border-bottom-width: var(--wk-rule-w-heavy);
+  border-bottom-color: var(--wk-seal);
+}
+
+.wk-field:focus-visible {
+  outline: none;
+}
+
+.wk-field:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.wk-field--boxed {
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  background-color: var(--wk-surface-raised);
+}
+
+.wk-field--boxed:focus {
+  border-width: var(--wk-rule-w);
+  border-color: var(--wk-seal);
+  box-shadow: var(--wk-shadow-sm);
+}
+
+/*
+ * Genko yoshi. Japanese manuscript paper, one square per character. Used on
+ * the source pane of the translator so composing text feels like writing.
+ */
+.wk-field--grid {
+  --cell: 30px;
+  min-height: calc(var(--cell) * 5);
+  padding: 0;
+  line-height: var(--cell);
+  font-size: calc(var(--cell) * 0.62);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  background-color: var(--wk-surface-raised);
+  background-image:
+    repeating-linear-gradient(to right, var(--wk-rule-hair) 0 1px, transparent 1px var(--cell)),
+    repeating-linear-gradient(to bottom, var(--wk-rule-soft) 0 1px, transparent 1px var(--cell));
+  resize: vertical;
+}
+
+.wk-field--grid:focus {
+  border-color: var(--wk-seal);
+  box-shadow: var(--wk-shadow-sm);
+}
+
+/* ==========================================================================
+   5. Combobox. A real listbox, never a native select, so the panel styling
+      and the script glyph samples survive on every platform.
+   ========================================================================== */
+
+.wk-combo {
+  position: relative;
+  display: inline-block;
+  width: 100%;
+}
+
+.wk-combo__trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--wk-s-2);
+  width: 100%;
+  min-height: var(--wk-control-h);
+  padding: 0 var(--wk-s-3);
+
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-base);
+  font-weight: 600;
+  text-align: left;
+  color: var(--wk-text);
+
+  background-color: var(--wk-surface-raised);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  box-shadow: var(--wk-shadow-sm);
+  cursor: pointer;
+  appearance: none;
+  transition: box-shadow var(--wk-dur-1) var(--wk-ease-stamp), transform var(--wk-dur-1) var(--wk-ease-stamp);
+}
+
+.wk-combo__trigger:hover {
+  background-color: var(--wk-seal-wash);
+}
+
+.wk-combo__trigger[aria-expanded="true"] {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 var(--wk-shadow-color);
+  border-color: var(--wk-seal);
+}
+
+/* The sample glyph shows the script itself. Flags are countries, not languages. */
+.wk-combo__glyph {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 26px;
+  height: 26px;
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-base);
+  line-height: 1;
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+  border: 1px solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+}
+
+.wk-combo__label {
+  flex: 1 1 auto;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wk-combo__caret {
+  flex: none;
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 6px solid var(--wk-text);
+  transition: transform var(--wk-dur-2) var(--wk-ease-out);
+}
+
+.wk-combo__trigger[aria-expanded="true"] .wk-combo__caret {
+  transform: rotate(180deg);
+}
+
+/* The popup is drawn as a manga panel dropped onto the page. */
+.wk-listbox {
+  position: absolute;
+  z-index: var(--wk-z-popover);
+  top: calc(100% + var(--wk-s-2));
+  left: 0;
+  width: 100%;
+  min-width: 260px;
+  max-height: 340px;
+  overflow-y: auto;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  background-color: var(--wk-surface-raised);
+  border: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  box-shadow: var(--wk-shadow-lg);
+  animation: wk-panel-drop var(--wk-dur-2) var(--wk-ease-stamp);
+}
+
+@keyframes wk-panel-drop {
+  from {
+    opacity: 0;
+    transform: translate(-3px, -6px) rotate(-0.6deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.wk-listbox__search {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  padding: var(--wk-s-2);
+  background-color: var(--wk-surface-raised);
+  border-bottom: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.wk-listbox__group {
+  padding: var(--wk-s-2) var(--wk-s-3) var(--wk-s-1);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+  background-color: var(--wk-surface-sunk);
+  border-bottom: 1px solid var(--wk-rule-hair);
+}
+
+.wk-option {
+  display: flex;
+  align-items: center;
+  gap: var(--wk-s-3);
+  padding: var(--wk-s-2) var(--wk-s-3);
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-base);
+  color: var(--wk-text);
+  cursor: pointer;
+  border-bottom: 1px solid var(--wk-rule-hair);
+}
+
+.wk-option:last-child {
+  border-bottom: 0;
+}
+
+.wk-option[aria-selected="true"] {
+  font-weight: 700;
+}
+
+.wk-option[data-active="true"] {
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+}
+
+.wk-option[data-active="true"] .wk-option__meta {
+  color: var(--wk-text-on-seal);
+  opacity: 0.85;
+}
+
+.wk-option__native {
+  flex: none;
+  min-width: 34px;
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-md);
+  line-height: 1;
+}
+
+.wk-option__body {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+.wk-option__meta {
+  display: block;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: 0.04em;
+  color: var(--wk-text-muted);
+}
+
+/* ==========================================================================
+   6. Toggle. Rectangular, hard travel, state spelled out in mono.
+   ========================================================================== */
+
+.wk-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wk-s-2);
+  cursor: pointer;
+  user-select: none;
+}
+
+.wk-toggle__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.wk-toggle__track {
+  position: relative;
+  flex: none;
+  width: 54px;
+  height: 26px;
+  background-color: var(--wk-surface-sunk);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  transition: background-color var(--wk-dur-2) linear;
+}
+
+.wk-toggle__knob {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 22px;
+  height: 20px;
+  background-color: var(--wk-text);
+  transition: transform var(--wk-dur-2) var(--wk-ease-stamp), background-color var(--wk-dur-2) linear;
+}
+
+.wk-toggle__input:checked + .wk-toggle__track {
+  background-color: var(--wk-seal);
+}
+
+.wk-toggle__input:checked + .wk-toggle__track .wk-toggle__knob {
+  transform: translateX(26px);
+  background-color: var(--wk-text-on-seal);
+}
+
+.wk-toggle__input:focus-visible + .wk-toggle__track {
+  outline: var(--wk-rule-w-heavy) solid var(--wk-seal);
+  outline-offset: 2px;
+}
+
+.wk-toggle__state {
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  color: var(--wk-text-muted);
+}
+
+/* ==========================================================================
+   7. Checkbox. The tick is drawn, not a glyph.
+   ========================================================================== */
+
+.wk-check {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wk-s-2);
+  cursor: pointer;
+}
+
+.wk-check__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+}
+
+.wk-check__box {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 22px;
+  height: 22px;
+  background-color: var(--wk-surface-raised);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+}
+
+.wk-check__tick {
+  width: 15px;
+  height: 15px;
+  fill: none;
+  stroke: var(--wk-seal);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 24;
+  stroke-dashoffset: 24;
+  transition: stroke-dashoffset var(--wk-dur-3) var(--wk-ease-out);
+}
+
+.wk-check__input:checked + .wk-check__box .wk-check__tick {
+  stroke-dashoffset: 0;
+}
+
+.wk-check__input:focus-visible + .wk-check__box {
+  outline: var(--wk-rule-w-heavy) solid var(--wk-seal);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   8. Chips, panels and balloons.
+   ========================================================================== */
+
+.wk-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wk-s-1);
+  padding: 3px var(--wk-s-2);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: 0.06em;
+  color: var(--wk-text);
+  background-color: transparent;
+  border: 1px solid var(--wk-rule-soft);
+  border-radius: var(--wk-r-1);
+  cursor: pointer;
+  transition: background-color var(--wk-dur-1) linear, border-color var(--wk-dur-1) linear;
+}
+
+.wk-chip:hover {
+  border-color: var(--wk-seal);
+  background-color: var(--wk-seal-wash);
+}
+
+.wk-chip[aria-pressed="true"],
+.wk-chip[data-selected="true"] {
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+  border-color: var(--wk-rule);
+}
+
+.wk-panel {
+  background-color: var(--wk-surface);
+  border: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  box-shadow: var(--wk-shadow);
+}
+
+.wk-panel--flat {
+  box-shadow: none;
+  border-width: var(--wk-rule-w);
+}
+
+/* Speech balloon with a real tail, used for tooltips and manga overlays. */
+.wk-balloon {
+  position: relative;
+  padding: var(--wk-s-3) var(--wk-s-4);
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-sm);
+  line-height: var(--wk-lh-snug);
+  color: var(--wk-text);
+  background-color: var(--wk-surface-raised);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-3);
+}
+
+.wk-balloon::before,
+.wk-balloon::after {
+  content: "";
+  position: absolute;
+  bottom: -11px;
+  left: var(--wk-s-6);
+  width: 0;
+  height: 0;
+  border-left: 9px solid transparent;
+  border-right: 9px solid transparent;
+  border-top: 11px solid var(--wk-rule);
+}
+
+.wk-balloon::after {
+  bottom: -7px;
+  border-top-color: var(--wk-surface-raised);
+}
+
+/* ==========================================================================
+   9. Loading. Screentone shimmer and speed lines, never a spinner.
+   ========================================================================== */
+
+.wk-tone {
+  background-image: radial-gradient(var(--wk-tone-dot) var(--wk-tone-r), transparent var(--wk-tone-r));
+  background-size: var(--wk-tone-size) var(--wk-tone-size);
+}
+
+.wk-loading {
+  background-image: radial-gradient(var(--wk-tone-dot) var(--wk-tone-r), transparent var(--wk-tone-r));
+  background-size: var(--wk-tone-size) var(--wk-tone-size);
+  animation: wk-tone-drift 900ms linear infinite;
+}
+
+@keyframes wk-tone-drift {
+  to {
+    background-position: var(--wk-tone-size) 0;
+  }
+}
+
+.wk-speedlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.wk-speedlines::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: repeating-linear-gradient(100deg, var(--wk-rule-hair) 0 1px, transparent 1px 9px);
+  animation: wk-speed 700ms linear infinite;
+}
+
+@keyframes wk-speed {
+  to {
+    transform: translateX(9px);
+  }
+}
+
+/* ==========================================================================
+   10. Utilities.
+   ========================================================================== */
+
+.wk-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.wk-caps {
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+/* ==========================================================================
+   11. Motion preferences are honoured across the whole system.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: reduce) {
+  .wk-scope *,
+  .wk-scope *::before,
+  .wk-scope *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .wk-btn:active:not(:disabled),
+  .wk-seal-btn:active:not(:disabled) {
+    transform: none;
+  }
+
+  .wk-speedlines::after,
+  .wk-loading {
+    animation: none;
+  }
+}
