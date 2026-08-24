@@ -1,0 +1,131 @@
+/*
+ * A type specimen sheet. Every language shows a sample of its own script at a
+ * size where the letterforms are actually visible, which is the honest way to
+ * present coverage: a reader can see whether their script renders properly
+ * before trusting anything else on the site.
+ */
+
+.specimen {
+  display: grid;
+  gap: var(--wk-s-8);
+}
+
+.family {
+  display: grid;
+  gap: var(--wk-s-3);
+}
+
+.family__head {
+  display: flex;
+  align-items: baseline;
+  gap: var(--wk-s-3);
+  padding-bottom: var(--wk-s-2);
+  border-bottom: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.family__title {
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-sm);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+}
+
+.family__count {
+  margin-inline-start: auto;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  color: var(--wk-text-muted);
+}
+
+.slugs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+  gap: var(--wk-s-3);
+}
+
+.slug {
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  gap: var(--wk-s-3);
+  align-items: center;
+  padding: var(--wk-s-3);
+  text-decoration: none;
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-1);
+  background-color: var(--wk-surface-raised);
+  transition: box-shadow var(--wk-dur-1) var(--wk-ease-stamp), transform var(--wk-dur-1) var(--wk-ease-stamp);
+}
+
+.slug:hover {
+  color: inherit;
+  transform: translate(-2px, -2px);
+  box-shadow: var(--wk-shadow);
+}
+
+.slug__glyph {
+  display: grid;
+  place-items: center;
+  height: 52px;
+  font-family: var(--wk-font-display);
+  font-size: 34px;
+  line-height: 1;
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-text);
+  border-radius: var(--wk-r-1);
+}
+
+.slug__native {
+  display: block;
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-md);
+  line-height: 1.2;
+}
+
+.slug__name {
+  display: block;
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+.slug__dialects {
+  display: block;
+  margin-top: 2px;
+  font-size: var(--wk-t-xs);
+  color: var(--wk-seal);
+}
+
+.ledger-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--wk-t-sm);
+}
+
+.ledger-table th,
+.ledger-table td {
+  padding: var(--wk-s-2) var(--wk-s-3);
+  text-align: start;
+  vertical-align: top;
+  border-bottom: 1px solid var(--wk-rule-hair);
+}
+
+.ledger-table th {
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+  border-bottom: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.ledger-table code {
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  color: var(--wk-seal);
+}
+
+.tablewrap {
+  overflow-x: auto;
+}

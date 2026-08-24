@@ -1,0 +1,220 @@
+/*
+ * The reader is a light table. Everything else in Wakaru is paper, so this
+ * page deliberately goes dark: artwork reads better against ink, and the
+ * vermilion detection outlines have to carry across a busy page.
+ */
+
+.table {
+  --table-bg: #0e0d0c;
+  --table-line: rgba(237, 230, 217, 0.16);
+
+  padding: var(--wk-s-5);
+  color: #ede6d9;
+  background-color: var(--table-bg);
+  background-image:
+    repeating-linear-gradient(to right, var(--table-line) 0 1px, transparent 1px 48px),
+    repeating-linear-gradient(to bottom, var(--table-line) 0 1px, transparent 1px 48px);
+  border: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  box-shadow: var(--wk-shadow);
+}
+
+.table__controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-3);
+  align-items: flex-end;
+  padding-bottom: var(--wk-s-4);
+  margin-bottom: var(--wk-s-4);
+  border-bottom: var(--wk-rule-w) solid var(--table-line);
+}
+
+.table__control {
+  flex: 0 1 220px;
+  min-width: 0;
+}
+
+.table__spacer {
+  flex: 1 1 auto;
+}
+
+/* --------------------------------------------------------------- dropzone */
+
+.dropzone {
+  display: grid;
+  place-items: center;
+  gap: var(--wk-s-3);
+  min-height: 340px;
+  padding: var(--wk-s-8);
+  text-align: center;
+  border: 3px dashed rgba(237, 230, 217, 0.3);
+  border-radius: var(--wk-r-1);
+  cursor: pointer;
+  transition: border-color var(--wk-dur-2) linear, background-color var(--wk-dur-2) linear;
+}
+
+.dropzone:hover,
+.dropzone[data-over="true"] {
+  border-color: var(--wk-raw-vermilion-lift, #e4553f);
+  background-color: rgba(228, 85, 63, 0.08);
+}
+
+.dropzone__title {
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-xl);
+}
+
+.dropzone__hint {
+  max-width: 46ch;
+  font-size: var(--wk-t-sm);
+  color: rgba(237, 230, 217, 0.6);
+}
+
+/* ------------------------------------------------------------ page canvas */
+
+.plate {
+  position: relative;
+  display: inline-block;
+  max-width: 100%;
+  line-height: 0;
+}
+
+.plate img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* One detected bubble, drawn over the artwork. */
+.bubble {
+  position: absolute;
+  border: 2px solid #e4553f;
+  border-radius: var(--wk-r-3);
+  cursor: pointer;
+  transition: background-color var(--wk-dur-1) linear;
+}
+
+.bubble[data-mode="outline"] {
+  background-color: rgba(228, 85, 63, 0.1);
+}
+
+.bubble[data-mode="outline"]:hover {
+  background-color: rgba(228, 85, 63, 0.26);
+}
+
+/* The translated text, set into the bubble it came from. */
+.bubble[data-mode="filled"] {
+  display: grid;
+  place-items: center;
+  padding: 4px;
+  color: #14110f;
+  background-color: #f7f3ec;
+  border-color: #14110f;
+}
+
+.bubble__text {
+  font-family: var(--wk-font-ui);
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  overflow-wrap: anywhere;
+  hyphens: auto;
+}
+
+.bubble__index {
+  position: absolute;
+  top: -11px;
+  inset-inline-start: -11px;
+  display: grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  font-family: var(--wk-font-mono);
+  font-size: 11px;
+  line-height: 1;
+  color: #fff6ef;
+  background-color: #e4553f;
+  border: 2px solid #14110f;
+  border-radius: var(--wk-r-seal);
+}
+
+/* --------------------------------------------------------------- progress */
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--wk-s-3);
+  padding: var(--wk-s-3) var(--wk-s-4);
+  margin-top: var(--wk-s-4);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: var(--wk-rule-w) solid var(--table-line);
+}
+
+.progress__bar {
+  flex: 1 1 auto;
+  height: 10px;
+  background-color: rgba(237, 230, 217, 0.12);
+  border: 1px solid var(--table-line);
+}
+
+.progress__fill {
+  height: 100%;
+  background-color: #e4553f;
+  transition: width var(--wk-dur-2) linear;
+}
+
+/* ------------------------------------------------------------ transcript */
+
+.transcript {
+  margin-top: var(--wk-s-6);
+}
+
+.panelrow {
+  display: grid;
+  grid-template-columns: 34px minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--wk-s-3);
+  align-items: start;
+  padding-block: var(--wk-s-3);
+  border-bottom: 1px solid var(--wk-rule-hair);
+}
+
+.panelrow__num {
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-seal);
+  border-radius: var(--wk-r-1);
+}
+
+.panelrow__raw {
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-md);
+}
+
+.panelrow__out {
+  font-family: var(--wk-font-read);
+  font-size: var(--wk-t-base);
+}
+
+.panelrow__meta {
+  grid-column: 2 / -1;
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+@media (max-width: 760px) {
+  .panelrow {
+    grid-template-columns: 26px minmax(0, 1fr);
+  }
+  .panelrow__out {
+    grid-column: 2;
+  }
+}
