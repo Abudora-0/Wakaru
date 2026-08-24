@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-label="Wakaru">
+  <title>Wakaru</title>
+
+  <rect width="1200" height="630" fill="#f4efe6" />
+
+  <!-- Screentone field, matching the texture used across the site. -->
+  <defs>
+    <pattern id="tone" width="14" height="14" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="1.6" fill="#14110f" opacity="0.09" />
+    </pattern>
+  </defs>
+  <rect width="1200" height="630" fill="url(#tone)" />
+
+  <rect x="48" y="48" width="1104" height="534" fill="none" stroke="#14110f" stroke-width="6" />
+
+  <g transform="translate(112 150) scale(2.1)">
+    <g transform="translate(6 8) scale(1.28)">
+      <path
+        d="M34 8 C54 8 68 21 68 36 C68 51 54 62 36 62 L30 62 C29 68 25 73 18 76 C22 70 22 66 20 62 C10 58 4 48 4 36 C4 21 16 8 34 8 Z"
+        fill="#14110f"
+      />
+      <g transform="translate(18 17) scale(0.359)" fill="none" stroke="#f4efe6"
+         stroke-width="11" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M44 8 L18 42" />
+        <path d="M58 8 L84 42" />
+        <path d="M22 54 H70 C72 74 66 86 54 92" />
+        <path d="M44 54 C40 70 34 82 20 92" />
+      </g>
+    </g>
+    <circle cx="107" cy="44" r="8.5" fill="#d8412f" />
+    <circle cx="116" cy="69" r="4.6" fill="#d8412f" opacity="0.62" />
+  </g>
+
+  <text x="430" y="270" font-family="Zen Antique, Georgia, serif" font-size="122" fill="#14110f">Wakaru</text>
+  <path d="M432 306 H1040" stroke="#d8412f" stroke-width="8" />
+  <text x="432" y="358" font-family="Georgia, serif" font-size="32" fill="#3a332c">
+    Translate dialects. Define any script.
+  </text>
+  <text x="432" y="402" font-family="Georgia, serif" font-size="32" fill="#3a332c">
+    Read raw manga in your own browser.
+  </text>
+  <text x="432" y="462" font-family="JetBrains Mono, Consolas, monospace" font-size="19" letter-spacing="5" fill="#6b6156">
+    NO API KEYS / NO ACCOUNTS / MIT
+  </text>
+</svg>

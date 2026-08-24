@@ -1,0 +1,35 @@
+# Self hosted translation, with no quota and no third party.
+#
+#   docker compose -f docker/libretranslate.yml up -d
+#   echo "LIBRETRANSLATE_URL=http://localhost:5000" >> .env.local
+#
+# Once LIBRETRANSLATE_URL is set the provider chain puts this first and only
+# falls back to MyMemory if it stops answering. The first start downloads the
+# language models, which takes a few minutes and a couple of gigabytes.
+#
+# LOAD_ONLY trims that to the languages you actually want. Remove it to install
+# everything.
+
+services:
+  libretranslate:
+    image: libretranslate/libretranslate:latest
+    container_name: wakaru-libretranslate
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      # Trim the model download. Drop this line for full coverage.
+      LT_LOAD_ONLY: "en,ja,ko,zh,es,fr,de,pt,ru,ar,hi,ur,it,nl,pl,tr"
+      LT_UPDATE_MODELS: "true"
+      LT_DISABLE_WEB_UI: "true"
+    volumes:
+      - libretranslate-models:/home/libretranslate/.local/share/argos-translate
+    healthcheck:
+      test: ["CMD-SHELL", "python -c \"import urllib.request; urllib.request.urlopen('http://localhost:5000/languages')\""]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      start_period: 300s
+
+volumes:
+  libretranslate-models:

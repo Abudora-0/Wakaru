@@ -1,0 +1,15 @@
+#!/bin/sh
+#
+# Wakaru pre-commit hook.
+#
+# Enable it once per clone:
+#   git config core.hooksPath .githooks
+#
+# It runs the house style guard only. Type checking and tests are left to CI
+# so that committing stays fast.
+
+if ! node scripts/check-no-emdash.mjs; then
+  echo ""
+  echo "Commit refused. Remove the banned characters and try again."
+  exit 1
+fi

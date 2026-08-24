@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Wakaru</title>
+  </head>
+  <body class="wk-scope">
+    <header class="head">
+      <svg viewBox="0 0 96 84" width="34" aria-hidden="true">
+        <path
+          d="M34 8 C54 8 68 21 68 36 C68 51 54 62 36 62 L30 62 C29 68 25 73 18 76 C22 70 22 66 20 62 C10 58 4 48 4 36 C4 21 16 8 34 8 Z"
+          fill="var(--wk-text)"
+        />
+        <text x="36" y="46" font-size="28" fill="var(--wk-bg)" text-anchor="middle" font-family="var(--wk-font-display)">分</text>
+        <circle cx="82" cy="26" r="6" fill="var(--wk-seal)" />
+        <circle cx="89" cy="43" r="3.2" fill="var(--wk-seal)" opacity="0.62" />
+      </svg>
+      <span>
+        <strong>Wakaru</strong>
+        <small>Read raw pages in place</small>
+      </span>
+    </header>
+
+    <main>
+      <label class="field">
+        <span class="wk-caps">Pages are written in</span>
+        <div class="chips" id="scripts"></div>
+      </label>
+
+      <label class="field">
+        <span class="wk-caps" for="target">Translate into</span>
+        <select id="target" class="wk-field wk-field--boxed"></select>
+      </label>
+
+      <label class="field">
+        <span class="wk-caps">Smallest image to offer</span>
+        <input id="minsize" type="number" min="80" max="2000" step="20" class="wk-field wk-field--boxed" />
+      </label>
+
+      <label class="field">
+        <span class="wk-caps">Translator endpoint</span>
+        <input id="apibase" type="url" class="wk-field wk-field--boxed" spellcheck="false" />
+        <small class="hint">
+          Point this at your own deployment to keep every request on your own infrastructure.
+        </small>
+      </label>
+
+      <p class="hint" id="status" role="status"></p>
+
+      <p class="hint">
+        Recognition runs on this machine. Only the recognised text is sent to the translator, never the image.
+      </p>
+    </main>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

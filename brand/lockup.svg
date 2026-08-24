@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 128" width="520" height="128" role="img" aria-label="Wakaru">
+  <title>Wakaru</title>
+  <desc>The Wakaru horizontal lockup: the ink drop balloon mark beside the wordmark.</desc>
+
+  <g transform="translate(0 0)">
+    <g transform="translate(6 8) scale(1.28)">
+      <path
+        d="M34 8 C54 8 68 21 68 36 C68 51 54 62 36 62 L30 62 C29 68 25 73 18 76 C22 70 22 66 20 62 C10 58 4 48 4 36 C4 21 16 8 34 8 Z"
+        fill="#14110f"
+      />
+      <g
+        transform="translate(18 17) scale(0.359)"
+        fill="none"
+        stroke="#f4efe6"
+        stroke-width="11"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M44 8 L18 42" />
+        <path d="M58 8 L84 42" />
+        <path d="M22 54 H70 C72 74 66 86 54 92" />
+        <path d="M44 54 C40 70 34 82 20 92" />
+      </g>
+    </g>
+    <circle cx="107" cy="44" r="8.5" fill="#d8412f" />
+    <circle cx="116" cy="69" r="4.6" fill="#d8412f" opacity="0.62" />
+    <circle cx="110" cy="88" r="2.5" fill="#d8412f" opacity="0.4" />
+  </g>
+
+  <text
+    x="146" y="66"
+    font-family="Zen Antique, Shippori Mincho, Georgia, Times New Roman, serif"
+    font-size="54"
+    fill="#14110f"
+  >Wakaru</text>
+
+  <path d="M148 80 H436" stroke="#d8412f" stroke-width="4" />
+
+  <text
+    x="148" y="102"
+    font-family="JetBrains Mono, Consolas, monospace"
+    font-size="13"
+    letter-spacing="4.4"
+    fill="#6b6156"
+  >TRANSLATE / DEFINE / READ</text>
+</svg>

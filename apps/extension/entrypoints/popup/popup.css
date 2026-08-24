@@ -1,0 +1,60 @@
+body {
+  width: 320px;
+  margin: 0;
+  padding: var(--wk-s-4);
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-sm);
+  color: var(--wk-text);
+  background-color: var(--wk-bg);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--wk-s-3);
+  padding-bottom: var(--wk-s-3);
+  margin-bottom: var(--wk-s-4);
+  border-bottom: var(--wk-rule-w-heavy) solid var(--wk-rule);
+}
+
+.head strong {
+  display: block;
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-lg);
+  line-height: 1;
+}
+
+.head small {
+  font-family: var(--wk-font-mono);
+  font-size: 9px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+.field {
+  display: block;
+  margin-bottom: var(--wk-s-4);
+}
+
+.field > .wk-caps {
+  display: block;
+  margin-bottom: var(--wk-s-1);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-1);
+}
+
+.hint {
+  margin-top: var(--wk-s-1);
+  font-size: var(--wk-t-xs);
+  line-height: 1.5;
+  color: var(--wk-text-muted);
+}
+
+select.wk-field {
+  cursor: pointer;
+}

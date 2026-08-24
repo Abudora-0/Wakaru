@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+
+# Cancel an in flight run when a branch is pushed again.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Style, types and tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      # Fails the build on an em dash anywhere in the tree.
+      - name: House style
+        run: npm run check:emdash
+
+      - name: Types
+        run: npm run typecheck
+
+      # Runs against recorded fixtures only. Never hits a provider, so CI
+      # cannot fail because a free endpoint is down and cannot spend a quota.
+      - name: Tests
+        run: npm test
+
+      - name: Build the web app
+        run: npm run build
+
+      - name: Build the extension
+        run: npm run ext:build
+
+  commit-style:
+    name: Commit messages
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # The project keeps assistant attribution out of its history.
+      - name: Reject AI attribution trailers
+        run: |
+          range="origin/${{ github.base_ref }}..HEAD"
+          if git log "$range" --format='%B' | grep -inE 'co-authored-by:.*(claude|copilot|chatgpt|cursor)|generated with .*(claude|copilot)'; then
+            echo "::error::Commit messages must not carry assistant attribution."
+            exit 1
+          fi
+          echo "Commit messages are clean."
