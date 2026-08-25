@@ -13,7 +13,7 @@ import { expect, test } from "@playwright/test";
 
 test.describe("on a phone", () => {
   test("folds the spread into stacked panels", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/translate");
 
     const columns = await page.locator(".spread").evaluate((node) => getComputedStyle(node).gridTemplateColumns);
 
@@ -22,7 +22,7 @@ test.describe("on a phone", () => {
   });
 
   test("keeps the seal reachable between the two panels", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/translate");
 
     const seal = page.locator(".gutter").getByRole("button", { name: "Translate" });
     await expect(seal).toBeVisible();
@@ -50,7 +50,7 @@ test.describe("on a phone", () => {
   });
 
   test("the language list is usable by touch", async ({ page }) => {
-    await page.goto("/");
+    await page.goto("/translate");
 
     await page.locator(".wk-combo__trigger").nth(1).tap();
     await expect(page.locator(".wk-listbox")).toBeVisible();

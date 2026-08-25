@@ -13,7 +13,7 @@ import { AFTER_FALLBACK, JAPANESE_PLAIN, SHAHMUKHI, SPANISH_MEXICAN, mockTransla
 const seal = ".gutter";
 
 test.beforeEach(async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/translate");
 });
 
 test.describe("translating", () => {

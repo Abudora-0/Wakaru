@@ -63,13 +63,13 @@ test.describe("command palette", () => {
     const input = page.getByRole("combobox", { name: "Search commands" });
 
     const first = await input.getAttribute("aria-activedescendant");
-    expect(first).toBe("palette-nav-translate");
+    expect(first).toBe("palette-nav-home");
 
     await page.keyboard.press("ArrowDown");
-    await expect(input).toHaveAttribute("aria-activedescendant", "palette-nav-dictionary");
+    await expect(input).toHaveAttribute("aria-activedescendant", "palette-nav-translate");
 
     await page.keyboard.press("ArrowUp");
-    await expect(input).toHaveAttribute("aria-activedescendant", "palette-nav-translate");
+    await expect(input).toHaveAttribute("aria-activedescendant", "palette-nav-home");
   });
 
   test("arrowing up from the top wraps to the bottom", async ({ page }) => {

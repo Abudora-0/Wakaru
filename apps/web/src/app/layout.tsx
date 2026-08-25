@@ -4,6 +4,7 @@ import { Nav } from "@/components/Nav";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { CommandPalette } from "@/components/CommandPalette";
 import { Wordmark } from "@/components/Logo";
+import { Colophon } from "@/components/Colophon";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -73,19 +74,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="shell">{children}</div>
           </main>
 
-          <footer className="colophon">
-            <div className="shell colophon__inner">
-              <p>
-                Wakaru runs on free, keyless sources. Definitions from{" "}
-                <a href="https://en.wiktionary.org">Wiktionary</a> and{" "}
-                <a href="https://dictionaryapi.dev">dictionaryapi.dev</a> under CC BY-SA. Recordings from{" "}
-                <a href="https://lingualibre.org">Lingua Libre</a>.
-              </p>
-              <p>
-                <a href="https://github.com/Abudora-0/Wakaru">Source</a> under MIT.
-              </p>
-            </div>
-          </footer>
+          <Colophon />
         </div>
       </body>
     </html>

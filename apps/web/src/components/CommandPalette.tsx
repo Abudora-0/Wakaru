@@ -99,7 +99,8 @@ export function CommandPalette() {
     };
 
     const navigation: Action[] = [
-      { id: "nav-translate", label: "Translate", hint: "/", glyph: "訳", group: "Go to", keywords: "home spread dialect", run: go("/") },
+      { id: "nav-home", label: "Home", hint: "/", glyph: "家", group: "Go to", keywords: "landing front start", run: go("/") },
+      { id: "nav-translate", label: "Translate", hint: "/translate", glyph: "訳", group: "Go to", keywords: "spread dialect", run: go("/translate") },
       { id: "nav-dictionary", label: "Dictionary", hint: "/dictionary", glyph: "辞", group: "Go to", keywords: "define word meaning lookup", run: go("/dictionary") },
       { id: "nav-read", label: "Read a raw page", hint: "/read", glyph: "読", group: "Go to", keywords: "manga manhwa ocr scan", run: go("/read") },
       { id: "nav-languages", label: "Languages and dialects", hint: "/languages", glyph: "語", group: "Go to", keywords: "specimen script coverage", run: go("/languages") },

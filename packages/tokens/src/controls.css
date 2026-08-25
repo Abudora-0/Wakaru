@@ -60,6 +60,26 @@
   background-color: var(--wk-surface-sunk);
 }
 
+/*
+ * No arrowheads.
+ *
+ * The stepper buttons at the ends of a scrollbar are operating system chrome
+ * that cannot be drawn to match anything else here, and nobody clicks them.
+ * Hiding the button pseudo element removes them and hands the space back to
+ * the track. The double variant covers the paired arrows some platforms put
+ * at a single end.
+ */
+.wk-scope ::-webkit-scrollbar-button,
+.wk-scope::-webkit-scrollbar-button,
+.wk-scope ::-webkit-scrollbar-button:single-button,
+.wk-scope::-webkit-scrollbar-button:single-button,
+.wk-scope ::-webkit-scrollbar-button:double-button,
+.wk-scope::-webkit-scrollbar-button:double-button {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 /* ==========================================================================
    2. Selection and focus. The focus ring is loud on purpose.
    ========================================================================== */

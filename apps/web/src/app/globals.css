@@ -167,24 +167,152 @@ h1, h2, h3, h4 {
    Colophon
    ========================================================================== */
 
+/* ==========================================================================
+   Colophon
+   ==========================================================================
+   Set as the back matter of a printed book rather than as a row of links:
+   the imprint on the left, the contents in columns, and a real colophon
+   naming what the thing is set in.
+   ========================================================================== */
+
 .colophon {
-  padding-block: var(--wk-s-6);
-  border-top: var(--wk-rule-w) solid var(--wk-rule);
+  margin-top: var(--wk-s-16);
+  border-top: var(--wk-rule-w-heavy) solid var(--wk-rule);
   background-color: var(--wk-surface);
 }
 
-.colophon__inner {
+.colophon__top {
+  display: grid;
+  grid-template-columns: minmax(240px, 1.4fr) repeat(3, minmax(140px, 1fr));
+  gap: var(--wk-s-8);
+  padding-block: var(--wk-s-10) var(--wk-s-8);
+}
+
+.imprint__mark {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--wk-s-4);
-  align-items: baseline;
-  justify-content: space-between;
+  align-items: center;
+  gap: var(--wk-s-3);
+  margin-bottom: var(--wk-s-4);
+}
+
+.imprint__name {
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-lg);
+  line-height: 1;
+}
+
+.imprint__blurb {
+  max-width: 34ch;
+  font-family: var(--wk-font-read);
   font-size: var(--wk-t-sm);
+  line-height: var(--wk-lh-read);
+  color: var(--wk-text-soft);
+}
+
+/* The seal that states the project's one distinguishing claim. */
+.imprint__seal {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--wk-s-2);
+  margin-top: var(--wk-s-4);
+  padding: var(--wk-s-1) var(--wk-s-3);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-seal);
+  border: 2px solid var(--wk-seal);
+  border-radius: var(--wk-r-1);
+  transform: rotate(-1.4deg);
+}
+
+.column__head {
+  margin-bottom: var(--wk-s-3);
+  padding-bottom: var(--wk-s-2);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  font-weight: 400;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+  border-bottom: 1px solid var(--wk-rule-soft);
+}
+
+.column__list {
+  display: grid;
+  gap: var(--wk-s-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--wk-t-sm);
+}
+
+.column__list a {
+  text-decoration: none;
+  color: var(--wk-text-soft);
+}
+
+.column__list a:hover {
+  color: var(--wk-seal);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.column__licence {
+  display: block;
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
   color: var(--wk-text-muted);
 }
 
-.colophon a {
+/* The colophon proper: what the thing is set in. */
+.colophon__bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-3) var(--wk-s-6);
+  align-items: baseline;
+  padding-block: var(--wk-s-4);
+  border-top: 1px solid var(--wk-rule-soft);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: 0.04em;
+  color: var(--wk-text-muted);
+}
+
+.colophon__bottom a {
   color: var(--wk-text-soft);
+  text-decoration: none;
+}
+
+.colophon__bottom a:hover {
+  color: var(--wk-seal);
+}
+
+.colophon__setin {
+  margin-inline-start: auto;
+  font-family: var(--wk-font-read);
+  font-size: var(--wk-t-xs);
+  font-style: italic;
+  letter-spacing: 0;
+  text-align: end;
+}
+
+@media (max-width: 900px) {
+  .colophon__top {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--wk-s-6);
+    padding-block: var(--wk-s-8) var(--wk-s-6);
+  }
+
+  .imprint {
+    grid-column: 1 / -1;
+  }
+
+  .colophon__setin {
+    margin-inline-start: 0;
+    text-align: start;
+  }
 }
 
 /* ==========================================================================

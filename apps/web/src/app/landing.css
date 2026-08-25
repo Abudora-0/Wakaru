@@ -1,0 +1,355 @@
+/*
+ * The landing page.
+ *
+ * Set as the cover and opening spread of a book: a masthead panel with the
+ * title, then the three things the site does presented as panels on a page
+ * rather than as feature cards floating in space. Nothing here is centred in
+ * a column, because a manga page is a grid and this one behaves like one.
+ */
+
+/* ------------------------------------------------------------------ cover */
+
+.cover {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+  border: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  box-shadow: var(--wk-shadow-lg);
+  background-color: var(--wk-surface);
+}
+
+.cover__type {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--wk-s-5);
+  padding: var(--wk-s-12) var(--wk-s-10);
+  min-width: 0;
+}
+
+.cover__eyebrow {
+  display: flex;
+  align-items: center;
+  gap: var(--wk-s-2);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+.cover__eyebrow::after {
+  content: "";
+  flex: 1 1 auto;
+  height: 1px;
+  background-color: var(--wk-rule-soft);
+}
+
+.cover__title {
+  font-family: var(--wk-font-display);
+  font-size: clamp(2.75rem, 6vw, 4.75rem);
+  line-height: 0.98;
+  letter-spacing: var(--wk-track-tight);
+}
+
+/* The reading above the title, set the way a furigana gloss would be. */
+.cover__ruby {
+  display: block;
+  margin-bottom: var(--wk-s-2);
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-md);
+  letter-spacing: 0.3em;
+  color: var(--wk-seal);
+}
+
+.cover__lede {
+  max-width: 46ch;
+  font-family: var(--wk-font-read);
+  font-size: var(--wk-t-md);
+  line-height: var(--wk-lh-read);
+  color: var(--wk-text-soft);
+}
+
+.cover__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-3);
+  align-items: center;
+}
+
+.cover__stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--wk-s-6);
+  padding-top: var(--wk-s-5);
+  border-top: 1px solid var(--wk-rule-soft);
+}
+
+.stat__figure {
+  display: block;
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-xl);
+  line-height: 1;
+}
+
+.stat__label {
+  display: block;
+  margin-top: 2px;
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+/* The right hand plate: the mark, oversized, on screentone. */
+.cover__plate {
+  position: relative;
+  display: grid;
+  place-items: center;
+  padding: var(--wk-s-8);
+  border-inline-start: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  background-color: var(--wk-surface-sunk);
+  background-image: radial-gradient(var(--wk-tone-dot) 1.4px, transparent 1.4px);
+  background-size: 9px 9px;
+  overflow: hidden;
+}
+
+.cover__plate svg {
+  width: min(320px, 100%);
+  height: auto;
+}
+
+/* A vertical strip of the source scripts, running down the plate edge. */
+.cover__scripts {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--wk-s-4);
+  width: 46px;
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-lg);
+  color: var(--wk-text-muted);
+  border-inline-start: 1px solid var(--wk-rule-soft);
+  background-color: var(--wk-surface);
+}
+
+/* ----------------------------------------------------------- panel strips */
+
+.strips {
+  display: grid;
+  gap: var(--wk-s-5);
+  margin-top: var(--wk-s-12);
+}
+
+/*
+ * Each strip is a manga panel: the number in the gutter, the artwork on one
+ * side, the text on the other, and the sides alternate down the page so it
+ * reads as a spread rather than as a stack of identical cards.
+ */
+.strip {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr) minmax(0, 1fr);
+  align-items: stretch;
+  border: var(--wk-rule-w-heavy) solid var(--wk-rule);
+  background-color: var(--wk-surface);
+  box-shadow: var(--wk-shadow);
+  text-decoration: none;
+  color: inherit;
+  transition: transform var(--wk-dur-2) var(--wk-ease-stamp), box-shadow var(--wk-dur-2) var(--wk-ease-stamp);
+}
+
+.strip:hover {
+  color: inherit;
+  transform: translate(-3px, -3px);
+  box-shadow: var(--wk-shadow-lg);
+}
+
+/*
+ * Alternate which side the example sits on, by placing the columns rather
+ * than by reordering them. order reshuffles grid items but they still auto
+ * place, so on an even strip the example landed in the narrow number column
+ * and the layout collapsed. Explicit placement is what actually swaps them.
+ */
+.strip:nth-child(even) .strip__demo {
+  grid-column: 2;
+  border-inline-start: 0;
+  border-inline-end: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.strip:nth-child(even) .strip__body {
+  grid-column: 3;
+}
+
+.strip__number {
+  grid-column: 1;
+  grid-row: 1;
+  display: grid;
+  place-items: center;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-lg);
+  color: var(--wk-text-on-seal);
+  background-color: var(--wk-text);
+  border-inline-end: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.strip__body {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-s-3);
+  padding: var(--wk-s-6);
+  min-width: 0;
+}
+
+.strip__title {
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-lg);
+  line-height: 1.1;
+}
+
+.strip__text {
+  font-family: var(--wk-font-read);
+  font-size: var(--wk-t-sm);
+  line-height: var(--wk-lh-read);
+  color: var(--wk-text-soft);
+}
+
+.strip__more {
+  margin-top: auto;
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-seal);
+}
+
+.strip__demo {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--wk-s-2);
+  padding: var(--wk-s-6);
+  min-width: 0;
+  border-inline-start: var(--wk-rule-w) solid var(--wk-rule);
+  background-color: var(--wk-surface-sunk);
+}
+
+/* A worked example, shown rather than described. */
+.demo__row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--wk-s-2);
+  font-size: var(--wk-t-sm);
+}
+
+.demo__label {
+  flex: none;
+  width: 62px;
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-text-muted);
+}
+
+.demo__value {
+  font-family: var(--wk-font-read);
+  overflow-wrap: anywhere;
+}
+
+.demo__value mark {
+  padding: 0 2px;
+  background-color: var(--wk-seal-wash);
+  border-bottom: 2px solid var(--wk-seal);
+  color: inherit;
+}
+
+.demo__ipa {
+  font-family: var(--wk-font-ipa);
+}
+
+.demo__note {
+  margin-top: var(--wk-s-2);
+  font-family: var(--wk-font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--wk-text-muted);
+}
+
+/* ------------------------------------------------------------- honest bit */
+
+.plainly {
+  margin-top: var(--wk-s-12);
+  padding: var(--wk-s-6);
+  border: var(--wk-rule-w) solid var(--wk-rule-soft);
+  background-color: var(--wk-surface);
+}
+
+.plainly__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: var(--wk-s-5);
+  margin-top: var(--wk-s-4);
+}
+
+.plainly__item h3 {
+  margin-bottom: var(--wk-s-1);
+  font-family: var(--wk-font-mono);
+  font-size: var(--wk-t-xs);
+  font-weight: 400;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  color: var(--wk-seal);
+}
+
+.plainly__item p {
+  font-family: var(--wk-font-read);
+  font-size: var(--wk-t-sm);
+  line-height: var(--wk-lh-read);
+  color: var(--wk-text-soft);
+}
+
+@media (max-width: 980px) {
+  .cover {
+    grid-template-columns: 1fr;
+  }
+
+  .cover__type {
+    padding: var(--wk-s-8) var(--wk-s-6);
+  }
+
+  .cover__plate {
+    border-inline-start: 0;
+    border-top: var(--wk-rule-w-heavy) solid var(--wk-rule);
+    padding-block: var(--wk-s-8);
+  }
+
+  .strip {
+    grid-template-columns: 44px minmax(0, 1fr);
+  }
+
+  .strip__number {
+    grid-row: 1 / span 2;
+  }
+
+  .strip__body,
+  .strip:nth-child(even) .strip__body {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .strip__demo,
+  .strip:nth-child(even) .strip__demo {
+    grid-column: 2;
+    grid-row: 2;
+    border-inline: 0;
+    border-top: var(--wk-rule-w) solid var(--wk-rule);
+  }
+}
