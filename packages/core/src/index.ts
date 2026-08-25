@@ -30,7 +30,7 @@ export {
   findLanguagesForWord, fetchWiktionaryAudio, fetchRelatedWords,
 } from "./dictionary/index";
 
-export { speak, stopSpeaking, matchVoice, loadVoices, speechSupported } from "./speech/index";
+export { speak, stopSpeaking, matchVoice, loadVoices, speechSupported, spokenLanguages } from "./speech/index";
 export type { SpeakOptions, SpeakOutcome, VoiceMatch } from "./speech/index";
 
 export { Lru } from "./util/lru";

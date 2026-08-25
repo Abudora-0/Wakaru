@@ -49,7 +49,7 @@ export function SpeakButton({ text, lang, size = "md", label }: SpeakButtonProps
   }
 
   return (
-    <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--wk-s-2)" }}>
+    <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--wk-s-2)", minWidth: 0 }}>
       <button
         type="button"
         className={size === "sm" ? "wk-seal-btn wk-seal-btn--sm" : "wk-seal-btn"}
@@ -62,7 +62,12 @@ export function SpeakButton({ text, lang, size = "md", label }: SpeakButtonProps
         <span className="wk-sr-only">{speaking ? "Stop speaking" : `Hear this read aloud in ${lang}`}</span>
       </button>
       {status ? (
-        <span className="wk-caps" role="status" style={{ textTransform: "none", letterSpacing: "0.02em" }}>
+        <span
+          className="wk-caps"
+          role="status"
+          title={status}
+          style={{ textTransform: "none", letterSpacing: "0.02em", maxWidth: "42ch", lineHeight: 1.4 }}
+        >
           {status}
         </span>
       ) : null}
