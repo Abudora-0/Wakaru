@@ -389,3 +389,86 @@ h1, h2, h3, h4 {
   .masthead__tagline { display: none; }
   .runhead__note { display: none; }
 }
+
+/* ==========================================================================
+   Motion
+   ==========================================================================
+   Everything here is inside a no-preference query, so a reader who has asked
+   for reduced motion gets the finished state and none of the movement. That
+   is why the rules add animation rather than removing it: the page has to be
+   correct with this whole block deleted.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Ink leaving the tail of the mark. */
+  .logo__drop {
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+
+  .logo--animated .logo__drop {
+    animation: ink-fall 3.4s var(--wk-ease-in-out) infinite;
+  }
+
+  .logo--animated .logo__drop--2 {
+    animation-delay: 0.22s;
+  }
+
+  .logo--animated .logo__drop--3 {
+    animation-delay: 0.44s;
+  }
+
+  @keyframes ink-fall {
+    0%, 62%, 100% {
+      transform: translateY(0) scale(1);
+    }
+    18% {
+      transform: translateY(-2px) scale(1.08);
+    }
+    40% {
+      transform: translateY(5px) scale(0.92);
+    }
+  }
+
+  /* The masthead mark leans into a press, like a seal about to stamp. */
+  .masthead__brand .logo {
+    transition: transform var(--wk-dur-3) var(--wk-ease-stamp);
+  }
+
+  .masthead__brand:hover .logo {
+    transform: rotate(-6deg) scale(1.06);
+  }
+
+  .masthead__brand .masthead__wordmark {
+    transition: letter-spacing var(--wk-dur-3) var(--wk-ease-out);
+  }
+
+  .masthead__brand:hover .masthead__wordmark {
+    letter-spacing: 0.04em;
+  }
+
+  /* Navigation underline, drawn from the leading edge. */
+  .navlink {
+    position: relative;
+  }
+
+  .navlink::after {
+    content: "";
+    position: absolute;
+    inset-inline: var(--wk-s-3);
+    bottom: 4px;
+    height: 2px;
+    background-color: var(--wk-seal);
+    transform: scaleX(0);
+    transform-origin: inline-start;
+    transition: transform var(--wk-dur-2) var(--wk-ease-out);
+  }
+
+  .navlink:hover::after {
+    transform: scaleX(1);
+  }
+
+  .navlink[aria-current="page"]::after {
+    display: none;
+  }
+}

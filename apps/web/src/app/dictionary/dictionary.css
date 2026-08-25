@@ -146,7 +146,7 @@
   height: 30px;
   font-family: var(--wk-font-mono);
   font-size: var(--wk-t-sm);
-  color: var(--wk-text-on-seal);
+  color: var(--wk-text-on-ink);
   background-color: var(--wk-text);
   border-radius: var(--wk-r-1);
 }

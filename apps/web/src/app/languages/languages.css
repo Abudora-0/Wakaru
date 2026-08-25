@@ -69,7 +69,7 @@
   font-family: var(--wk-font-display);
   font-size: 34px;
   line-height: 1;
-  color: var(--wk-text-on-seal);
+  color: var(--wk-text-on-ink);
   background-color: var(--wk-text);
   border-radius: var(--wk-r-1);
 }

@@ -166,7 +166,7 @@
   --wk-text-soft: var(--wk-raw-bone-2);
   --wk-text-muted: var(--wk-raw-bone-3);
   --wk-text-on-seal: #fff6ef;
-  --wk-text-on-ink: var(--wk-raw-bone);
+  --wk-text-on-ink: var(--wk-raw-night);
 
   --wk-seal: var(--wk-raw-vermilion-lift);
   --wk-seal-deep: #b83a28;
@@ -202,7 +202,7 @@
     --wk-text-soft: var(--wk-raw-bone-2);
     --wk-text-muted: var(--wk-raw-bone-3);
     --wk-text-on-seal: #fff6ef;
-    --wk-text-on-ink: var(--wk-raw-bone);
+    --wk-text-on-ink: var(--wk-raw-night);
 
     --wk-seal: var(--wk-raw-vermilion-lift);
     --wk-seal-deep: #b83a28;

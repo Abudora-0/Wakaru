@@ -13,6 +13,59 @@
    1. Scrollbar. Square, screentone track, vermilion thumb with an ink border.
    ========================================================================== */
 
+/*
+ * The page scrollbar belongs to the root element, not to the body.
+ *
+ * Every rule below was scoped under .wk-scope, which sits on body, so it
+ * styled scrollbars inside the page and left the one down the side of the
+ * window untouched, arrowheads and all. The document scrollbar has to be
+ * addressed on html directly.
+ *
+ * This block is unscoped on purpose. It is safe because the extension's
+ * content script never loads this stylesheet: it injects its own styles into
+ * a shadow root, so a third party page cannot be restyled from here.
+ */
+html {
+  scrollbar-color: var(--wk-seal) var(--wk-surface-sunk);
+  scrollbar-width: auto;
+}
+
+html::-webkit-scrollbar {
+  width: var(--wk-scrollbar-w);
+  height: var(--wk-scrollbar-w);
+}
+
+html::-webkit-scrollbar-track {
+  background-color: var(--wk-surface-sunk);
+  background-image: radial-gradient(var(--wk-tone-dot) var(--wk-tone-r), transparent var(--wk-tone-r));
+  background-size: var(--wk-tone-size) var(--wk-tone-size);
+  border-left: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: var(--wk-seal);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: 0;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: var(--wk-seal-deep);
+}
+
+html::-webkit-scrollbar-corner {
+  background-color: var(--wk-surface-sunk);
+}
+
+html::-webkit-scrollbar-button,
+html::-webkit-scrollbar-button:single-button,
+html::-webkit-scrollbar-button:double-button,
+html::-webkit-scrollbar-button:start,
+html::-webkit-scrollbar-button:end {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 .wk-scope {
   scrollbar-color: var(--wk-seal) var(--wk-surface-sunk);
   scrollbar-width: auto;
@@ -74,7 +127,11 @@
 .wk-scope ::-webkit-scrollbar-button:single-button,
 .wk-scope::-webkit-scrollbar-button:single-button,
 .wk-scope ::-webkit-scrollbar-button:double-button,
-.wk-scope::-webkit-scrollbar-button:double-button {
+.wk-scope::-webkit-scrollbar-button:double-button,
+.wk-scope ::-webkit-scrollbar-button:start,
+.wk-scope::-webkit-scrollbar-button:start,
+.wk-scope ::-webkit-scrollbar-button:end,
+.wk-scope::-webkit-scrollbar-button:end {
   display: none;
   width: 0;
   height: 0;
@@ -310,7 +367,18 @@
 .wk-field--grid {
   --cell: 30px;
   min-height: calc(var(--cell) * 5);
-  padding: 0;
+
+  /*
+   * The manuscript grid used to start hard against the border with the text
+   * sitting on top of it, which left the first character crammed into the
+   * corner. Padding fixes the text, and background-origin moves the grid with
+   * it so the squares still line up with the line height rather than drifting
+   * out of register.
+   */
+  padding: var(--wk-s-3);
+  background-origin: content-box;
+  background-clip: padding-box;
+
   line-height: var(--cell);
   font-size: calc(var(--cell) * 0.62);
   border: var(--wk-rule-w) solid var(--wk-rule);

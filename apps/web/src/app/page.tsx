@@ -69,7 +69,7 @@ export default function LandingPage() {
         </div>
 
         <div className="cover__plate">
-          <Logo size={320} title="Wakaru" />
+          <Logo size={320} title="Wakaru" animated />
           <div className="cover__scripts" aria-hidden="true">
             <span lang="ja">日</span>
             <span lang="ko">한</span>

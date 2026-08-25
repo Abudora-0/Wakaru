@@ -191,7 +191,7 @@
   place-items: center;
   font-family: var(--wk-font-mono);
   font-size: var(--wk-t-lg);
-  color: var(--wk-text-on-seal);
+  color: var(--wk-text-on-ink);
   background-color: var(--wk-text);
   border-inline-end: var(--wk-rule-w) solid var(--wk-rule);
 }
@@ -351,5 +351,129 @@
     grid-row: 2;
     border-inline: 0;
     border-top: var(--wk-rule-w) solid var(--wk-rule);
+  }
+}
+
+/* ==========================================================================
+   Landing motion
+   ==========================================================================
+   Written as additions inside a no-preference query. Delete this whole block
+   and the page is still correct and fully visible, which is the property that
+   makes it safe to animate at all.
+   ========================================================================== */
+
+@media (prefers-reduced-motion: no-preference) {
+  /* The cover sets itself, line by line, the way type is laid into a forme. */
+  .cover__eyebrow,
+  .cover__ruby,
+  .cover__title,
+  .cover__lede,
+  .cover__actions,
+  .cover__stats {
+    animation: lay-in var(--wk-dur-4) var(--wk-ease-out) both;
+  }
+
+  .cover__ruby { animation-delay: 60ms; }
+  .cover__title { animation-delay: 110ms; }
+  .cover__lede { animation-delay: 190ms; }
+  .cover__actions { animation-delay: 260ms; }
+  .cover__stats { animation-delay: 330ms; }
+
+  @keyframes lay-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* The plate arrives as a stamp: slight overshoot, then settle. */
+  .cover__plate .logo {
+    animation: stamp-down var(--wk-dur-4) var(--wk-ease-stamp) both;
+    animation-delay: 120ms;
+  }
+
+  @keyframes stamp-down {
+    from {
+      opacity: 0;
+      transform: scale(1.12) rotate(-4deg);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .cover__scripts span {
+    animation: lay-in var(--wk-dur-3) var(--wk-ease-out) both;
+  }
+
+  .cover__scripts span:nth-child(2) { animation-delay: 90ms; }
+  .cover__scripts span:nth-child(3) { animation-delay: 180ms; }
+  .cover__scripts span:nth-child(4) { animation-delay: 270ms; }
+  .cover__scripts span:nth-child(5) { animation-delay: 360ms; }
+
+  /*
+   * Panels reveal as they come into view, using a scroll driven timeline so
+   * no observer or client component is needed. Wrapped in @supports because
+   * only Chromium implements it today: everywhere else the panels are simply
+   * there from the start, which is the correct fallback rather than a
+   * degraded one.
+   */
+  @supports (animation-timeline: view()) {
+    .strip,
+    .plainly {
+      animation: panel-in linear both;
+      animation-timeline: view();
+      animation-range: entry 5% cover 26%;
+    }
+
+    @keyframes panel-in {
+      from {
+        opacity: 0;
+        transform: translateY(26px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+
+  /* The number block turns as the panel is hovered, like a page corner. */
+  .strip__number {
+    transition: background-color var(--wk-dur-2) linear;
+  }
+
+  .strip:hover .strip__number {
+    background-color: var(--wk-seal);
+    color: var(--wk-text-on-seal);
+  }
+
+  .strip__more {
+    transition: transform var(--wk-dur-2) var(--wk-ease-out);
+  }
+
+  .strip:hover .strip__more {
+    transform: translateX(4px);
+  }
+
+  /* The rewritten word draws its own underline once the panel is in view. */
+  .demo__value mark {
+    background-size: 100% 100%;
+  }
+
+  .strip:hover .demo__value mark {
+    animation: mark-sweep var(--wk-dur-4) var(--wk-ease-out);
+  }
+
+  @keyframes mark-sweep {
+    from {
+      background-color: transparent;
+      border-bottom-color: transparent;
+    }
   }
 }
