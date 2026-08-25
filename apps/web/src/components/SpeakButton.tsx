@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { loadVoices, matchVoice, speak, stopSpeaking, voiceAvailability, type VoiceAvailability } from "@wakaru/core";
+import { useEffect, useRef, useState } from "react";
+import { loadVoices, matchVoice, piperVoiceFor, speak, stopSpeaking, PIPER_MODEL_MB } from "@wakaru/core";
+import { isVoiceReady, synthesise } from "@/lib/piper";
 
 export interface SpeakButtonProps {
   text: string;
@@ -10,87 +11,164 @@ export interface SpeakButtonProps {
   label?: string;
 }
 
+type Route = "device" | "piper" | "none";
+
 /**
  * The seal doubles as the play control.
  *
- * Availability is worked out when the language changes rather than when the
- * button is pressed, because "no voice for this language" is something a
- * reader should learn before reaching for a control, not after hearing
- * silence. Where a voice is merely unlikely the button still works, since the
- * browser can often approximate, and only a language the platform genuinely
- * does not speak is disabled outright.
+ * Three routes, tried in order, and the reader is told which one answered:
+ *
+ *   device  a system voice exists. Instant, nothing to download.
+ *   piper   no system voice, but a neural model can be fetched and run here.
+ *           Roughly 60 MB the first time, then cached and offline.
+ *   none    neither. Said plainly rather than played as silence.
+ *
+ * The route is worked out when the language changes, not when the button is
+ * pressed, so a download is something a reader agrees to rather than something
+ * that starts under them.
  */
 export function SpeakButton({ text, lang, size = "md", label }: SpeakButtonProps) {
+  const [route, setRoute] = useState<Route | null>(null);
+  const [ready, setReady] = useState(false);
   const [speaking, setSpeaking] = useState(false);
+  const [progress, setProgress] = useState<number | null>(null);
   const [status, setStatus] = useState<string | null>(null);
-  const [availability, setAvailability] = useState<VoiceAvailability | null>(null);
+
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const releaseRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     let cancelled = false;
+    setStatus(null);
+    setProgress(null);
 
-    void loadVoices().then((voices) => {
+    void (async () => {
+      const voices = await loadVoices();
       if (cancelled) return;
-      setAvailability(voiceAvailability(lang, voices, matchVoice(voices, lang) !== null));
-    });
+
+      if (matchVoice(voices, lang)) {
+        setRoute("device");
+        setReady(true);
+        return;
+      }
+
+      if (piperVoiceFor(lang)) {
+        setRoute("piper");
+        setReady(await isVoiceReady(lang));
+        return;
+      }
+
+      setRoute("none");
+      setReady(false);
+    })();
 
     return () => {
       cancelled = true;
     };
   }, [lang]);
 
-  async function onPlay() {
-    if (speaking) {
+  // Object URLs and audio elements outlive the component unless released.
+  useEffect(() => {
+    return () => {
+      audioRef.current?.pause();
+      releaseRef.current?.();
       stopSpeaking();
-      setSpeaking(false);
+    };
+  }, []);
+
+  function stop() {
+    audioRef.current?.pause();
+    stopSpeaking();
+    setSpeaking(false);
+  }
+
+  async function play() {
+    if (speaking) {
+      stop();
       return;
     }
 
     setStatus(null);
     setSpeaking(true);
 
-    const outcome = await speak(text, lang, {
-      onEnd: () => setSpeaking(false),
-      onError: (reason) => {
+    if (route === "device") {
+      const outcome = await speak(text, lang, {
+        onEnd: () => setSpeaking(false),
+        onError: (reason) => {
+          setSpeaking(false);
+          setStatus(reason);
+        },
+      });
+      if (!outcome.spoken) {
         setSpeaking(false);
-        setStatus(reason);
-      },
-    });
+        setStatus(outcome.unavailable ?? "could not speak that");
+      } else if (outcome.approximate) {
+        setStatus(outcome.approximate);
+      }
+      return;
+    }
 
-    if (!outcome.spoken) {
+    try {
+      const result = await synthesise(text, lang, (p) => setProgress(p.value));
+      setProgress(null);
+      setReady(true);
+
+      releaseRef.current?.();
+      releaseRef.current = result.release;
+
+      const audio = new Audio(result.url);
+      audioRef.current = audio;
+      audio.addEventListener("ended", () => setSpeaking(false));
+      audio.addEventListener("error", () => {
+        setSpeaking(false);
+        setStatus("the voice could not be played");
+      });
+      await audio.play();
+    } catch {
       setSpeaking(false);
-      setStatus(outcome.unavailable ?? "could not speak that");
-    } else if (outcome.approximate) {
-      setStatus(outcome.approximate);
+      setProgress(null);
+      setStatus("the voice could not be downloaded");
     }
   }
 
-  const unavailable = availability?.offer === false;
-  const disabled = !text.trim() || unavailable;
+  const unavailable = route === "none";
+  const disabled = !text.trim() || unavailable || route === null;
 
-  // Before the voice list resolves, say nothing rather than guess.
-  const hint = unavailable ? availability?.reason : status;
+  const hint =
+    progress !== null
+      ? `downloading the voice, ${Math.round(progress * 100)} percent`
+      : unavailable
+        ? "no voice is available for this language"
+        : status;
 
   const title = unavailable
-    ? `No voice for ${lang} on this device`
-    : (label ?? `Hear this in ${lang}`);
+    ? `No voice for ${lang}`
+    : route === "piper" && !ready
+      ? `Download a ${PIPER_MODEL_MB} MB voice for ${lang}, once, then it works offline`
+      : (label ?? `Hear this in ${lang}`);
 
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--wk-s-2)", minWidth: 0 }}>
       <button
         type="button"
         className={size === "sm" ? "wk-seal-btn wk-seal-btn--sm" : "wk-seal-btn"}
-        onClick={onPlay}
+        onClick={() => void play()}
         disabled={disabled}
         aria-pressed={speaking}
         title={title}
+        data-route={route ?? undefined}
       >
-        <span aria-hidden="true">{unavailable ? "\u2014" : speaking ? "\u25a0" : "\u25b6"}</span>
+        <span aria-hidden="true">
+          {unavailable ? "\u2014" : speaking ? "\u25a0" : route === "piper" && !ready ? "\u2193" : "\u25b6"}
+        </span>
         <span className="wk-sr-only">
           {unavailable
             ? `No voice available for ${lang}`
             : speaking
-              ? "Stop speaking"
-              : `Hear this read aloud in ${lang}`}
+              ? "Stop"
+              : route === "piper" && !ready
+                ? `Download a voice for ${lang} and read this aloud`
+                : `Hear this read aloud in ${lang}`}
         </span>
       </button>
 
@@ -99,7 +177,7 @@ export function SpeakButton({ text, lang, size = "md", label }: SpeakButtonProps
           className="wk-caps"
           role="status"
           title={hint}
-          style={{ textTransform: "none", letterSpacing: "0.02em", maxWidth: "42ch", lineHeight: 1.4 }}
+          style={{ textTransform: "none", letterSpacing: "0.02em", maxWidth: "40ch", lineHeight: 1.4 }}
         >
           {hint}
         </span>

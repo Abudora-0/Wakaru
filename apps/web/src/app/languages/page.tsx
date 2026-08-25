@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DIALECTS, LANGUAGES, totalDialectCount, voiceLikelihood } from "@wakaru/core";
+import { DIALECTS, LANGUAGES, piperVoiceFor, totalDialectCount, voiceLikelihood } from "@wakaru/core";
 import "./languages.css";
 
 export const metadata: Metadata = {
@@ -143,13 +143,35 @@ function DialectRegister() {
  * means nobody has to press a play button on forty languages to find out.
  */
 function VoiceMark({ lang }: { lang: string }) {
+  /*
+   * A downloadable neural voice is a promise rather than a prediction: it does
+   * not depend on the reader's operating system, on which voices they have
+   * installed, or on a privacy blocker hiding the list. So it outranks any
+   * guess about device coverage.
+   */
+  if (piperVoiceFor(lang)) {
+    return (
+      <span className="slug__voice" data-level="wide" title="Runs in your browser, downloaded once">
+        Voice
+      </span>
+    );
+  }
+
   const likelihood = voiceLikelihood(lang);
 
   if (likelihood === "wide") {
-    return <span className="slug__voice" data-level="wide">Voice</span>;
+    return (
+      <span className="slug__voice" data-level="device" title="Uses a voice from your operating system">
+        Voice, if installed
+      </span>
+    );
   }
   if (likelihood === "common") {
-    return <span className="slug__voice" data-level="common">Voice, usually</span>;
+    return (
+      <span className="slug__voice" data-level="common" title="Some platforms ship one, many do not">
+        Voice, sometimes
+      </span>
+    );
   }
   return <span className="slug__voice" data-level="rare">No voice</span>;
 }

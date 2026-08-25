@@ -33,6 +33,7 @@ export {
 export {
   speak, stopSpeaking, matchVoice, loadVoices, speechSupported, spokenLanguages,
   voiceLikelihood, voiceAvailability, spokenByMostPlatforms,
+  piperVoiceFor, piperLanguages, PIPER_MODEL_MB,
 } from "./speech/index";
 export type { SpeakOptions, SpeakOutcome, VoiceMatch, VoiceLikelihood, VoiceAvailability } from "./speech/index";
 

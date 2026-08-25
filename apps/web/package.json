@@ -10,6 +10,7 @@
     "start": "next start"
   },
   "dependencies": {
+    "@diffusionstudio/vits-web": "^1.0.3",
     "@wakaru/core": "*",
     "@wakaru/ocr": "*",
     "@wakaru/tokens": "*",

@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { matchVoice, spokenLanguages, voiceAvailability, voiceLikelihood } from "./index";
+import { matchVoice, piperLanguages, piperVoiceFor, spokenLanguages, voiceAvailability, voiceLikelihood } from "./index";
 
 /**
  * Voice matching, tested against the voice lists real machines actually
@@ -129,5 +129,41 @@ describe("voiceAvailability", () => {
     expect(result.state).toBe("blocked");
     expect(result.offer).toBe(true);
     expect(result.reason).toMatch(/privacy blocker/i);
+  });
+});
+
+describe("downloadable voices", () => {
+  it("offers a voice for the languages the runtime ships", () => {
+    for (const code of ["en", "es", "fr", "de", "zh", "ru", "ar", "pt", "tr", "uk"]) {
+      expect(piperVoiceFor(code)).not.toBeNull();
+    }
+  });
+
+  it("gives a dialect its own voice rather than the base language's", () => {
+    // Asking for Mexican Spanish and getting a Castilian voice is exactly the
+    // sort of quiet substitution the rest of this project refuses to make.
+    expect(piperVoiceFor("es-MX")).toBe("es_MX-ald-medium");
+    expect(piperVoiceFor("es-ES")).toBe("es_ES-davefx-medium");
+    expect(piperVoiceFor("en-GB")).toBe("en_GB-alan-medium");
+    expect(piperVoiceFor("pt-PT")).toBe("pt_PT-tugão-medium");
+  });
+
+  it("falls back to the base language for a dialect with no voice of its own", () => {
+    expect(piperVoiceFor("es-AR")).toBe(piperVoiceFor("es"));
+    expect(piperVoiceFor("ar-EG")).toBe(piperVoiceFor("ar"));
+  });
+
+  it("returns null for the languages the runtime does not carry", () => {
+    // Japanese and Korean are in Piper upstream but not in the voice mirror
+    // this runtime is pinned to, so they stay on device voices. Claiming
+    // otherwise would produce a download that 404s.
+    expect(piperVoiceFor("ja")).toBeNull();
+    expect(piperVoiceFor("ko")).toBeNull();
+    expect(piperVoiceFor("hi")).toBeNull();
+    expect(piperVoiceFor("ur")).toBeNull();
+  });
+
+  it("covers a useful share of the registry", () => {
+    expect(piperLanguages().length).toBeGreaterThanOrEqual(30);
   });
 });

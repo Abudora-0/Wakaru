@@ -196,3 +196,5 @@ export function stopSpeaking(): void {
 
 export { voiceLikelihood, voiceAvailability, spokenByMostPlatforms } from "./coverage";
 export type { VoiceLikelihood, VoiceAvailability } from "./coverage";
+
+export { piperVoiceFor, piperLanguages, PIPER_MODEL_MB } from "./piper";

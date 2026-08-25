@@ -259,6 +259,38 @@ wakaru/
   scripts/        house style guard, brand build
 ```
 
+## Voices
+
+Speech takes three routes, tried in order, and the interface says which one
+answered:
+
+1. **A voice from your operating system.** Instant, nothing to download. This
+   is Web Speech, so coverage depends entirely on the machine.
+2. **A neural voice that runs in your browser.** Piper models are fetched once,
+   about 60 MB, cached, and then run locally on the CPU. No key, no endpoint
+   that can rate limit or disappear, and it works with a privacy blocker that
+   hides the system voice list.
+3. **Nothing**, said plainly rather than played as silence.
+
+Nothing downloads until a language actually needs it, so a reader whose machine
+already speaks Spanish never fetches a Spanish model.
+
+### What is covered
+
+33 languages have a downloadable voice, including Spanish, French, German,
+Chinese, Arabic, Russian, Portuguese, Italian, Dutch, Polish, Turkish,
+Ukrainian, Vietnamese, Persian and the Nordic languages. Mexican Spanish,
+British English, European Portuguese and Flemish have voices of their own
+rather than borrowing the base language's.
+
+**Japanese and Korean do not.** They exist in Piper upstream but not in the
+voice mirror this runtime is pinned to, so they fall back to a system voice.
+Both are widely installed, so most readers still hear them, but the site says
+so rather than pretending.
+
+The languages page marks every entry: a downloadable voice reads as a promise,
+a system voice reads as a prediction, and neither reads as "no voice".
+
 ## Deploying
 
 Wakaru needs no environment variables to run, so a deploy is genuinely just an
