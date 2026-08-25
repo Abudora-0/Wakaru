@@ -193,3 +193,6 @@ export async function speak(text: string, lang: LangCode, options: SpeakOptions 
 export function stopSpeaking(): void {
   if (speechSupported()) window.speechSynthesis.cancel();
 }
+
+export { voiceLikelihood, voiceAvailability, spokenByMostPlatforms } from "./coverage";
+export type { VoiceLikelihood, VoiceAvailability } from "./coverage";

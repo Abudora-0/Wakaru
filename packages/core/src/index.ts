@@ -30,8 +30,11 @@ export {
   findLanguagesForWord, fetchWiktionaryAudio, fetchRelatedWords,
 } from "./dictionary/index";
 
-export { speak, stopSpeaking, matchVoice, loadVoices, speechSupported, spokenLanguages } from "./speech/index";
-export type { SpeakOptions, SpeakOutcome, VoiceMatch } from "./speech/index";
+export {
+  speak, stopSpeaking, matchVoice, loadVoices, speechSupported, spokenLanguages,
+  voiceLikelihood, voiceAvailability, spokenByMostPlatforms,
+} from "./speech/index";
+export type { SpeakOptions, SpeakOutcome, VoiceMatch, VoiceLikelihood, VoiceAvailability } from "./speech/index";
 
 export { Lru } from "./util/lru";
 export { stripWikiHtml, extractExample, escapeRegExp } from "./util/html";

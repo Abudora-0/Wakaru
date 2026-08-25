@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { DIALECTS, LANGUAGES, totalDialectCount } from "@wakaru/core";
+import { DIALECTS, LANGUAGES, totalDialectCount, voiceLikelihood } from "@wakaru/core";
 import "./languages.css";
 
 export const metadata: Metadata = {
@@ -63,6 +63,7 @@ export default function LanguagesPage() {
                         {language.dialects.length} {language.dialects.length === 1 ? "dialect" : "dialects"}
                       </span>
                     ) : null}
+                    <VoiceMark lang={language.code} />
                   </span>
                 </Link>
               ))}
@@ -132,4 +133,23 @@ function DialectRegister() {
       </div>
     </section>
   );
+}
+
+/**
+ * Whether a reader is likely to be able to hear this language.
+ *
+ * Speech comes from voices the operating system provides, so this is a
+ * prediction rather than a fact, and it is labelled as one. Saying it here
+ * means nobody has to press a play button on forty languages to find out.
+ */
+function VoiceMark({ lang }: { lang: string }) {
+  const likelihood = voiceLikelihood(lang);
+
+  if (likelihood === "wide") {
+    return <span className="slug__voice" data-level="wide">Voice</span>;
+  }
+  if (likelihood === "common") {
+    return <span className="slug__voice" data-level="common">Voice, usually</span>;
+  }
+  return <span className="slug__voice" data-level="rare">No voice</span>;
 }

@@ -129,3 +129,37 @@
 .tablewrap {
   overflow-x: auto;
 }
+
+/*
+ * Voice coverage, marked on each language.
+ *
+ * Speech depends on the reader's operating system rather than on this site,
+ * so these are predictions and the wording says so. The rare case is the one
+ * that matters: it stops someone hunting for a play button that was never
+ * going to work.
+ */
+.slug__voice {
+  display: inline-block;
+  margin-top: 3px;
+  padding: 1px 5px;
+  font-family: var(--wk-font-mono);
+  font-size: 9px;
+  letter-spacing: var(--wk-track-caps);
+  text-transform: uppercase;
+  border: 1px solid currentColor;
+  border-radius: var(--wk-r-1);
+}
+
+.slug__voice[data-level="wide"] {
+  color: var(--wk-ok);
+}
+
+.slug__voice[data-level="common"] {
+  color: var(--wk-text-muted);
+}
+
+.slug__voice[data-level="rare"] {
+  color: var(--wk-text-muted);
+  opacity: 0.7;
+  border-style: dashed;
+}

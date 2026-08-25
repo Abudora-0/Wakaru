@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { speak, stopSpeaking } from "@wakaru/core";
+import { useEffect, useState } from "react";
+import { loadVoices, matchVoice, speak, stopSpeaking, voiceAvailability, type VoiceAvailability } from "@wakaru/core";
 
 export interface SpeakButtonProps {
   text: string;
@@ -13,14 +13,30 @@ export interface SpeakButtonProps {
 /**
  * The seal doubles as the play control.
  *
- * Web Speech uses whatever voices the operating system has, so a dialect the
- * machine cannot speak is a real and common outcome. Rather than silently
- * reading Mexican Spanish in a Castilian voice, the button says which voice it
- * actually used, or that there is none.
+ * Availability is worked out when the language changes rather than when the
+ * button is pressed, because "no voice for this language" is something a
+ * reader should learn before reaching for a control, not after hearing
+ * silence. Where a voice is merely unlikely the button still works, since the
+ * browser can often approximate, and only a language the platform genuinely
+ * does not speak is disabled outright.
  */
 export function SpeakButton({ text, lang, size = "md", label }: SpeakButtonProps) {
   const [speaking, setSpeaking] = useState(false);
   const [status, setStatus] = useState<string | null>(null);
+  const [availability, setAvailability] = useState<VoiceAvailability | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    void loadVoices().then((voices) => {
+      if (cancelled) return;
+      setAvailability(voiceAvailability(lang, voices, matchVoice(voices, lang) !== null));
+    });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [lang]);
 
   async function onPlay() {
     if (speaking) {
@@ -48,27 +64,44 @@ export function SpeakButton({ text, lang, size = "md", label }: SpeakButtonProps
     }
   }
 
+  const unavailable = availability?.offer === false;
+  const disabled = !text.trim() || unavailable;
+
+  // Before the voice list resolves, say nothing rather than guess.
+  const hint = unavailable ? availability?.reason : status;
+
+  const title = unavailable
+    ? `No voice for ${lang} on this device`
+    : (label ?? `Hear this in ${lang}`);
+
   return (
     <span style={{ display: "inline-flex", alignItems: "center", gap: "var(--wk-s-2)", minWidth: 0 }}>
       <button
         type="button"
         className={size === "sm" ? "wk-seal-btn wk-seal-btn--sm" : "wk-seal-btn"}
         onClick={onPlay}
-        disabled={!text.trim()}
+        disabled={disabled}
         aria-pressed={speaking}
-        title={label ?? `Hear this in ${lang}`}
+        title={title}
       >
-        <span aria-hidden="true">{speaking ? "■" : "▶"}</span>
-        <span className="wk-sr-only">{speaking ? "Stop speaking" : `Hear this read aloud in ${lang}`}</span>
+        <span aria-hidden="true">{unavailable ? "\u2014" : speaking ? "\u25a0" : "\u25b6"}</span>
+        <span className="wk-sr-only">
+          {unavailable
+            ? `No voice available for ${lang}`
+            : speaking
+              ? "Stop speaking"
+              : `Hear this read aloud in ${lang}`}
+        </span>
       </button>
-      {status ? (
+
+      {hint ? (
         <span
           className="wk-caps"
           role="status"
-          title={status}
+          title={hint}
           style={{ textTransform: "none", letterSpacing: "0.02em", maxWidth: "42ch", lineHeight: 1.4 }}
         >
-          {status}
+          {hint}
         </span>
       ) : null}
     </span>

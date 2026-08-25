@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { matchVoice, spokenLanguages } from "./index";
+import { matchVoice, spokenLanguages, voiceAvailability, voiceLikelihood } from "./index";
 
 /**
  * Voice matching, tested against the voice lists real machines actually
@@ -75,5 +75,59 @@ describe("spokenLanguages", () => {
 
   it("is empty when the browser reports nothing", () => {
     expect(spokenLanguages([])).toEqual([]);
+  });
+});
+
+describe("voice coverage", () => {
+  it("treats the languages every platform ships as wide", () => {
+    for (const code of ["en", "es", "ja", "ar", "hi", "zh"]) {
+      expect(voiceLikelihood(code)).toBe("wide");
+    }
+  });
+
+  it("treats optional platform downloads as common", () => {
+    expect(voiceLikelihood("ur")).toBe("common");
+    expect(voiceLikelihood("cy")).toBe("common");
+  });
+
+  it("treats anything else as rare", () => {
+    expect(voiceLikelihood("haw")).toBe("rare");
+    expect(voiceLikelihood("eo")).toBe("rare");
+  });
+
+  it("resolves a dialect to its base before judging", () => {
+    // es-MX has no voice list of its own here, but Spanish certainly does.
+    expect(voiceLikelihood("es-MX")).toBe("wide");
+    expect(voiceLikelihood("pa-Arab")).toBe("common");
+  });
+});
+
+describe("voiceAvailability", () => {
+  const someVoices = [{ lang: "en-US" }, { lang: "fr-FR" }];
+
+  it("offers straight away when a voice is installed", () => {
+    expect(voiceAvailability("en", someVoices, true)).toEqual({ state: "device", offer: true });
+  });
+
+  it("still offers a widely shipped language with nothing installed", () => {
+    const result = voiceAvailability("ja", someVoices, false);
+    expect(result.state).toBe("likely");
+    expect(result.offer).toBe(true);
+  });
+
+  it("declines a language the platform rarely speaks", () => {
+    const result = voiceAvailability("haw", someVoices, false);
+    expect(result.state).toBe("unlikely");
+    expect(result.offer).toBe(false);
+    expect(result.reason).toMatch(/no voice/i);
+  });
+
+  it("blames the blocker, not the language, when no voices are reported", () => {
+    // Reporting "Hawaiian is unsupported" here would send someone to fix
+    // entirely the wrong thing.
+    const result = voiceAvailability("haw", [], false);
+    expect(result.state).toBe("blocked");
+    expect(result.offer).toBe(true);
+    expect(result.reason).toMatch(/privacy blocker/i);
   });
 });
