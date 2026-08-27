@@ -1,7 +1,16 @@
 import { PSM, createWorker, type Worker } from "tesseract.js";
 import { detectBubbles, looksVertical } from "./bubbles";
+import { stripFurigana } from "./furigana";
 import { createCanvas, prepareRegion } from "./preprocess";
-import { SCRIPT_MODELS, type Box, type OcrLang, type OcrPage, type OcrRegion, type RecognizeOptions } from "./types";
+import {
+  DEFAULT_MIN_CONFIDENCE,
+  SCRIPT_MODELS,
+  type Box,
+  type OcrLang,
+  type OcrPage,
+  type OcrRegion,
+  type RecognizeOptions,
+} from "./types";
 
 /**
  * The recogniser.
@@ -57,6 +66,18 @@ async function readBox(
   });
 
   const prepared = prepareRegion(source, box, { scale: 2, binarise: true });
+
+  /*
+   * Furigana is the small reading gloss beside a kanji column, and it is the
+   * single biggest source of garbage in Japanese output: Tesseract has no
+   * idea it is looking at two different things and reads the gloss as more
+   * body text, interleaved into whatever comes out. It is a vertical layout
+   * phenomenon, so it is only attempted for vertical Japanese.
+   */
+  if (vertical && lang === "jpn_vert") {
+    stripFuriganaFromCanvas(prepared.canvas);
+  }
+
   // The published ImageLike union predates OffscreenCanvas, which the worker
   // accepts at runtime, so the surface is narrowed to a canvas for the call.
   const result = await worker.recognize(prepared.canvas as HTMLCanvasElement);
@@ -65,6 +86,42 @@ async function readBox(
     text: cleanText(result.data.text),
     confidence: result.data.confidence,
   };
+}
+
+/**
+ * Blank the furigana columns of a prepared, binarised region canvas in place.
+ *
+ * The canvas convention from prepareRegion is dark ink at 0 and light
+ * background at 255. stripFurigana works on a plain 1-is-ink mask, so the
+ * conversion happens on the way in and the paint happens on the way out.
+ */
+function stripFuriganaFromCanvas(canvas: OffscreenCanvas | HTMLCanvasElement): void {
+  const context = canvas.getContext("2d") as OffscreenCanvasRenderingContext2D | CanvasRenderingContext2D | null;
+  if (!context) return;
+
+  const { width, height } = canvas;
+  if (width === 0 || height === 0) return;
+
+  const image = context.getImageData(0, 0, width, height);
+
+  const mask = new Uint8Array(width * height);
+  for (let i = 0, p = 0; i < image.data.length; i += 4, p++) {
+    mask[p] = (image.data[i] ?? 0) < 128 ? 1 : 0;
+  }
+
+  const { removed, mask: cleaned } = stripFurigana(mask, width, height);
+  if (removed.length === 0) return;
+
+  for (let p = 0; p < cleaned.length; p++) {
+    if (mask[p] === 1 && cleaned[p] === 0) {
+      const i = p * 4;
+      image.data[i] = 255;
+      image.data[i + 1] = 255;
+      image.data[i + 2] = 255;
+    }
+  }
+
+  context.putImageData(image, 0, 0);
 }
 
 /**
@@ -100,7 +157,6 @@ export async function recognizePage(
 ): Promise<OcrPage> {
   const started = Date.now();
   const models = SCRIPT_MODELS[options.script];
-  const minConfidence = options.minConfidence ?? 40;
 
   const page = toCanvas(source, width, height);
 
@@ -129,6 +185,7 @@ export async function recognizePage(
     const box = boxes[index] as Box;
     const vertical = !wholePage && Boolean(models.vertical) && looksVertical(box);
     const lang = vertical && models.vertical ? models.vertical : models.horizontal;
+    const minConfidence = options.minConfidence ?? DEFAULT_MIN_CONFIDENCE[lang];
 
     options.onProgress?.({
       stage: "reading",

@@ -60,11 +60,37 @@ export interface RecognizeOptions {
    * unrelated text blocks rather than a document.
    */
   detectBubbles?: boolean;
-  /** Drop regions the engine was not confident about. */
+  /**
+   * Drop regions the engine was not confident about.
+   *
+   * Leave unset to use DEFAULT_MIN_CONFIDENCE, which is tuned per recognition
+   * language rather than a single number. Set this only to override that
+   * table uniformly across every region on the page.
+   */
   minConfidence?: number;
   onProgress?: (progress: OcrProgress) => void;
   signal?: AbortSignal;
 }
+
+/**
+ * Confidence floor per recognition language, used when minConfidence is not
+ * given explicitly.
+ *
+ * Tesseract is systematically more pessimistic on vertical Japanese than on
+ * anything else it reads, an artefact of a model trained mostly on horizontal
+ * Latin documents: text it recognises correctly still often scores in the
+ * thirties. A single floor tuned to be safe for that case would let real
+ * garbage through everywhere else, so each engine gets its own number rather
+ * than sharing one that fits nothing well.
+ */
+export const DEFAULT_MIN_CONFIDENCE: Record<OcrLang, number> = {
+  eng: 40,
+  jpn: 35,
+  jpn_vert: 25,
+  kor: 40,
+  chi_sim: 35,
+  chi_tra: 35,
+};
 
 /** Model files for each script, with the vertical variant where one exists. */
 export const SCRIPT_MODELS: Record<SourceScript, { horizontal: OcrLang; vertical?: OcrLang }> = {
