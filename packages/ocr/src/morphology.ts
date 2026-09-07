@@ -101,12 +101,67 @@ function sweep(mask: Uint8Array, width: number, height: number, radius: number, 
  * components by bounding box leaves every outline standing and still turns
  * each balloon interior into one solid shape.
  */
+export interface FillTextHolesOptions {
+  /**
+   * A candidate blob is only filled when the ink density of a window around
+   * it, measured in the original mask, is at or below this fraction.
+   *
+   * Bounding box size alone cannot tell a text stroke from a hair strand or a
+   * facial mark: both are small, thin, dark shapes at the same pixel scale.
+   * What differs is what surrounds them. A character sits in a balloon
+   * interior that is nearly all light apart from the letters themselves,
+   * while a stray mark in the artwork sits among denser line work. Measuring
+   * the density of a window around the region rather than only its own
+   * already small footprint is what tells the two apart.
+   */
+  maxContextInk?: number;
+}
+
+const FILL_DEFAULTS: Required<FillTextHolesOptions> = {
+  maxContextInk: 0.35,
+};
+
+/**
+ * A summed area table over the dark pixels, so the ink density of any
+ * rectangular window can be read in constant time rather than by rescanning
+ * it for every candidate blob on the page.
+ */
+function buildDarkIntegral(mask: Uint8Array, width: number, height: number): Int32Array {
+  const stride = width + 1;
+  const integral = new Int32Array(stride * (height + 1));
+
+  for (let y = 0; y < height; y++) {
+    let rowSum = 0;
+    for (let x = 0; x < width; x++) {
+      rowSum += mask[y * width + x] === 0 ? 1 : 0;
+      integral[(y + 1) * stride + (x + 1)] = (integral[y * stride + (x + 1)] ?? 0) + rowSum;
+    }
+  }
+
+  return integral;
+}
+
+/** Dark pixel count in [x0, x1) by [y0, y1), using the table above. */
+function darkCount(integral: Int32Array, width: number, x0: number, y0: number, x1: number, y1: number): number {
+  const stride = width + 1;
+  return (
+    (integral[y1 * stride + x1] ?? 0) -
+    (integral[y0 * stride + x1] ?? 0) -
+    (integral[y1 * stride + x0] ?? 0) +
+    (integral[y0 * stride + x0] ?? 0)
+  );
+}
+
 export function fillTextHoles(
   mask: Uint8Array,
   width: number,
   height: number,
   maxGlyph: number,
+  options: FillTextHolesOptions = {},
 ): Uint8Array {
+  const settings = { ...FILL_DEFAULTS, ...options };
+  const darkIntegral = buildDarkIntegral(mask, width, height);
+
   const out = Uint8Array.from(mask);
   const seen = new Uint8Array(mask.length);
   const stack: number[] = [];
@@ -145,6 +200,17 @@ export function fillTextHoles(
     // Panel borders and page furniture reach the edge and are not lettering.
     if (touchesEdge) continue;
     if (maxX - minX + 1 > maxGlyph || maxY - minY + 1 > maxGlyph) continue;
+
+    // A window one glyph wide on every side, so the measurement reflects the
+    // surroundings rather than only the blob's own already small footprint.
+    const x0 = Math.max(0, minX - maxGlyph);
+    const y0 = Math.max(0, minY - maxGlyph);
+    const x1 = Math.min(width, maxX + 1 + maxGlyph);
+    const y1 = Math.min(height, maxY + 1 + maxGlyph);
+    const windowArea = (x1 - x0) * (y1 - y0);
+    const contextInk = windowArea > 0 ? darkCount(darkIntegral, width, x0, y0, x1, y1) / windowArea : 1;
+
+    if (contextInk > settings.maxContextInk) continue;
 
     for (const index of pixels) out[index] = 1;
 

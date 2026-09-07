@@ -15,6 +15,19 @@ import { fillTextHoles, open } from "./morphology";
  * model. A speech bubble is an enclosed light region, bounded by drawn ink,
  * that is roughly convex and has text sized dark marks inside it. Every one of
  * those properties is cheap to measure.
+ *
+ * The one property that quietly fails is enclosure. Measured against a real
+ * page, the worst merge on record spanned three balloons and the character
+ * art between them, inside a single panel with no dividers of its own, and it
+ * turned out to be present even in the raw ink mask before any morphology
+ * ran. The cause is structural rather than a preprocessing artefact: a
+ * bubble's tail is drawn as an open wedge in most art styles, not a closed
+ * loop, so the interior is never actually sealed off from the panel behind
+ * it. No amount of filling text holes fixes that, because the opening isn't
+ * a hole, it's the tail doing exactly what it was drawn to do. What does fix
+ * it is an opening pass wide enough to erase the width of that channel,
+ * which is why the default here is considerably larger than the two or three
+ * pixels that would be enough to sever a merely thin outline.
  */
 
 export interface DetectOptions {
@@ -39,6 +52,12 @@ export interface DetectOptions {
    * balloons.
    */
   openRadius?: number;
+  /**
+   * How much ink is allowed around a small dark mark before it is treated as
+   * artwork rather than as a stray letter stroke and left standing. See
+   * fillTextHoles in morphology.ts for what this actually guards against.
+   */
+  maxContextInk?: number;
 }
 
 const DEFAULTS: Required<DetectOptions> = {
@@ -49,7 +68,8 @@ const DEFAULTS: Required<DetectOptions> = {
   minInkRatio: 0.02,
   maxInkRatio: 0.55,
   maxGlyphRatio: 0.05,
-  openRadius: 2,
+  openRadius: 8,
+  maxContextInk: 0.35,
 };
 
 interface Component {
@@ -199,7 +219,7 @@ export function boxesFromMask(
    * the interior around every glyph.
    */
   const maxGlyph = Math.round(Math.min(width, height) * settings.maxGlyphRatio);
-  const filled = fillTextHoles(inkMask, width, height, maxGlyph);
+  const filled = fillTextHoles(inkMask, width, height, maxGlyph, { maxContextInk: settings.maxContextInk });
   const shapes = open(filled, width, height, settings.openRadius);
 
   const pageArea = width * height;
@@ -246,7 +266,55 @@ export function boxesFromMask(
     });
   }
 
-  return sortReadingOrder(boxes);
+  return sortReadingOrder(dedupeOverlapping(boxes));
+}
+
+/**
+ * A box that is mostly covered by a tighter one is not a second balloon, it
+ * is the same balloon detected twice. This happens for a structural reason
+ * rather than a bug in any one step: a round or oval bubble's bounding
+ * rectangle can overlap a neighbouring shape's rectangle even when the two
+ * ink shapes never touch, because a rectangle is a poor fit for a round
+ * outline. Severing a bridge with a larger opening radius also tends to
+ * throw off an extra, looser fragment alongside the tight one.
+ *
+ * The fraction is measured against the smaller of the two boxes, so a small
+ * box mostly swallowed by a much larger one is treated as a duplicate of
+ * that larger box exactly the same way a large box mostly swallowing a small
+ * one is, regardless of which is first in the list.
+ */
+export function overlapFraction(a: Box, b: Box): number {
+  const x0 = Math.max(a.x, b.x);
+  const y0 = Math.max(a.y, b.y);
+  const x1 = Math.min(a.x + a.width, b.x + b.width);
+  const y1 = Math.min(a.y + a.height, b.y + b.height);
+  const overlap = Math.max(0, x1 - x0) * Math.max(0, y1 - y0);
+  if (overlap === 0) return 0;
+
+  const smaller = Math.min(a.width * a.height, b.width * b.height);
+  return smaller === 0 ? 0 : overlap / smaller;
+}
+
+/**
+ * Drop a box that mostly duplicates a tighter one already kept.
+ *
+ * Boxes are visited smallest first, so the tight box in a duplicate pair is
+ * always the one already sitting in the kept list by the time its looser
+ * duplicate is considered, and it is the looser one that gets dropped. Doing
+ * this the other way round, largest first, would keep whichever box the
+ * detector happened to produce first and throw away the tighter, better
+ * crop, which is the one actually worth handing to the recogniser.
+ */
+export function dedupeOverlapping(boxes: Box[], minOverlap = 0.7): Box[] {
+  const bySize = [...boxes].sort((a, b) => a.width * a.height - b.width * b.height);
+  const kept: Box[] = [];
+
+  for (const box of bySize) {
+    const duplicatesSomethingKept = kept.some((k) => overlapFraction(box, k) >= minOverlap);
+    if (!duplicatesSomethingKept) kept.push(box);
+  }
+
+  return kept;
 }
 
 /**

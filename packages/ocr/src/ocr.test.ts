@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { cleanText } from "./engine";
-import { looksVertical, sortReadingOrder } from "./bubbles";
+import { dedupeOverlapping, looksVertical, overlapFraction, sortReadingOrder } from "./bubbles";
 import { otsuThreshold } from "./preprocess";
 
 /** Build a fake greyscale RGBA buffer from a list of luma values. */
@@ -80,5 +80,82 @@ describe("orientation", () => {
 
   it("treats a wide bubble as horizontal", () => {
     expect(looksVertical({ x: 0, y: 0, width: 220, height: 90 })).toBe(false);
+  });
+});
+
+describe("overlapFraction", () => {
+  it("is zero for boxes that do not touch", () => {
+    const a = { x: 0, y: 0, width: 10, height: 10 };
+    const b = { x: 50, y: 50, width: 10, height: 10 };
+    expect(overlapFraction(a, b)).toBe(0);
+  });
+
+  it("is one when a box is fully inside another", () => {
+    const outer = { x: 0, y: 0, width: 100, height: 100 };
+    const inner = { x: 10, y: 10, width: 20, height: 20 };
+    expect(overlapFraction(outer, inner)).toBe(1);
+    // Symmetric: measured against the smaller box either way round.
+    expect(overlapFraction(inner, outer)).toBe(1);
+  });
+
+  it("scales with how much of the smaller box is covered", () => {
+    const a = { x: 0, y: 0, width: 10, height: 10 };
+    const b = { x: 5, y: 0, width: 10, height: 10 };
+    // Half of the 10x10 smaller box overlaps.
+    expect(overlapFraction(a, b)).toBeCloseTo(0.5, 5);
+  });
+});
+
+describe("dedupeOverlapping", () => {
+  it("keeps two boxes that do not overlap", () => {
+    const boxes = [
+      { x: 0, y: 0, width: 10, height: 10 },
+      { x: 50, y: 50, width: 10, height: 10 },
+    ];
+    expect(dedupeOverlapping(boxes)).toHaveLength(2);
+  });
+
+  it("drops the looser box and keeps the tight one", () => {
+    // The exact shape of the real failure: a clean, tight crop of a balloon
+    // and a second, larger, mostly overlapping box around it that pulls in
+    // extra background. Only the tight one is worth handing to the
+    // recogniser.
+    const tight = { x: 10, y: 10, width: 20, height: 20 };
+    const loose = { x: 5, y: 5, width: 40, height: 40 };
+
+    const kept = dedupeOverlapping([loose, tight]);
+
+    expect(kept).toHaveLength(1);
+    expect(kept[0]).toEqual(tight);
+  });
+
+  it("keeps the tight box regardless of which order the two arrive in", () => {
+    const tight = { x: 10, y: 10, width: 20, height: 20 };
+    const loose = { x: 5, y: 5, width: 40, height: 40 };
+
+    expect(dedupeOverlapping([tight, loose])[0]).toEqual(tight);
+    expect(dedupeOverlapping([loose, tight])[0]).toEqual(tight);
+  });
+
+  it("does not merge two distinct boxes that only partly overlap", () => {
+    // Two genuinely separate balloons whose rectangular bounds clip corners,
+    // which round shapes do constantly, must both survive.
+    const a = { x: 0, y: 0, width: 20, height: 20 };
+    const b = { x: 15, y: 15, width: 20, height: 20 };
+
+    expect(dedupeOverlapping([a, b], 0.7)).toHaveLength(2);
+  });
+
+  it("respects a custom overlap threshold", () => {
+    const a = { x: 0, y: 0, width: 10, height: 10 };
+    const b = { x: 4, y: 0, width: 10, height: 10 };
+
+    // 60 percent of the smaller box overlaps here.
+    expect(dedupeOverlapping([a, b], 0.9)).toHaveLength(2);
+    expect(dedupeOverlapping([a, b], 0.5)).toHaveLength(1);
+  });
+
+  it("leaves an empty list empty", () => {
+    expect(dedupeOverlapping([])).toEqual([]);
   });
 });
