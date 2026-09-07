@@ -15,18 +15,26 @@ test.describe("search", () => {
     await page.goto("/dictionary");
   });
 
+  // Some specs below assert only on the client side navigation, but landing on
+  // an entry route makes the server render it, and that calls the provider
+  // chain directly (it has no HTTP route to intercept), so router.push settles
+  // only once a real upstream answers. That can be slow in CI, and @live specs
+  // never run there, so the wait is widened to keep this navigation covered in
+  // the default run without turning a slow provider into a failure.
+  const ENTRY_NAV = { timeout: 20_000 };
+
   test("goes to the entry for the word and language chosen", async ({ page }) => {
     await page.getByLabel("Word").fill("serendipity");
     await page.getByRole("button", { name: "Look up" }).click();
 
-    await expect(page).toHaveURL(/\/dictionary\/en\/serendipity$/);
+    await expect(page).toHaveURL(/\/dictionary\/en\/serendipity$/, ENTRY_NAV);
   });
 
   test("submits on enter, without reaching for the button", async ({ page }) => {
     await page.getByLabel("Word").fill("saudade");
     await page.getByLabel("Word").press("Enter");
 
-    await expect(page).toHaveURL(/\/dictionary\/en\/saudade$/);
+    await expect(page).toHaveURL(/\/dictionary\/en\/saudade$/, ENTRY_NAV);
   });
 
   test("will not search for nothing", async ({ page }) => {
@@ -48,12 +56,12 @@ test.describe("search", () => {
 
   test("percent encodes a non Latin word into the URL", async ({ page }) => {
     await page.getByRole("button", { name: "猫", exact: true }).click();
-    await expect(page).toHaveURL(/\/dictionary\/ja\/%E7%8C%AB$/);
+    await expect(page).toHaveURL(/\/dictionary\/ja\/%E7%8C%AB$/, ENTRY_NAV);
   });
 
   test("carries the suggestion's own language, not the one in the picker", async ({ page }) => {
     await page.getByRole("button", { name: "کتاب", exact: true }).click();
-    await expect(page).toHaveURL(/\/dictionary\/ur\//);
+    await expect(page).toHaveURL(/\/dictionary\/ur\//, ENTRY_NAV);
   });
 });
 
