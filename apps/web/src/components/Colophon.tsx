@@ -23,6 +23,7 @@ const PRODUCT = [
 const SOURCES = [
   { href: "https://en.wiktionary.org", label: "Wiktionary", licence: "CC BY-SA 4.0" },
   { href: "https://dictionaryapi.dev", label: "dictionaryapi.dev", licence: "CC BY-SA 3.0" },
+  { href: "https://jisho.org", label: "Jisho, from JMdict", licence: "CC BY-SA 4.0" },
   { href: "https://lingualibre.org", label: "Lingua Libre", licence: "CC BY-SA 4.0" },
   { href: "https://mymemory.translated.net", label: "MyMemory", licence: "Free tier" },
   { href: "https://www.datamuse.com/api/", label: "Datamuse", licence: "Free for public use" },

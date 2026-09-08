@@ -188,8 +188,8 @@ export default function LandingPage() {
           <div className="plainly__item">
             <h3>Where the words come from</h3>
             <p>
-              Wiktionary, dictionaryapi.dev, Lingua Libre, MyMemory and Datamuse. Each entry names its sources and
-              their licences, because CC BY-SA requires it.
+              Wiktionary, dictionaryapi.dev, Jisho, Lingua Libre, MyMemory and Datamuse. Each entry names its sources
+              and their licences, because CC BY-SA requires it.
             </p>
           </div>
           <div className="plainly__item">

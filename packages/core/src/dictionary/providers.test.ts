@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { createDictionaryApiDevProvider } from "./dictionaryapi-dev";
 import { createWiktionaryProvider } from "./wiktionary";
+import { createJishoProvider } from "./jisho";
 
 /**
  * These two providers are the layer that turns whatever an upstream service
@@ -323,5 +324,66 @@ describe("Datamuse", () => {
     // Enrichment is a bonus on top of a real entry, so it must never be the
     // reason a lookup fails.
     await expect(fetchRelatedWords("serendipity")).resolves.toEqual({ synonyms: [], antonyms: [] });
+  });
+});
+
+describe("Jisho", () => {
+  // Trimmed from a real response for 日本語, which Wiktionary's Japanese
+  // coverage has no reading for at all.
+  const fixture = {
+    data: [
+      {
+        japanese: [{ word: "日本語", reading: "にほんご" }, { word: "日本語", reading: "にっぽんご" }],
+        senses: [
+          { english_definitions: ["Japanese (language)"], parts_of_speech: ["Noun"] },
+          { english_definitions: ["Japanese language"], parts_of_speech: ["Wikipedia definition"] },
+        ],
+      },
+      {
+        japanese: [{ word: "日本語能力試験", reading: "にほんごのうりょくしけん" }],
+        senses: [{ english_definitions: ["JLPT"], parts_of_speech: ["Noun"] }],
+      },
+    ],
+  };
+
+  it("only claims Japanese", () => {
+    const provider = createJishoProvider();
+    expect(provider.supports("ja")).toBe(true);
+    expect(provider.supports("en")).toBe(false);
+    expect(provider.supports("ko")).toBe(false);
+  });
+
+  it("picks the reading from the entry that actually matches the headword", async () => {
+    respondWith(fixture);
+    const entry = await createJishoProvider().lookup("日本語", "ja");
+
+    expect(entry?.reading).toBe("にほんご");
+  });
+
+  it("ignores a related word Jisho's fuzzy search returned alongside it", async () => {
+    respondWith(fixture);
+    const entry = await createJishoProvider().lookup("日本語", "ja");
+
+    expect(entry?.senses).toHaveLength(1);
+    expect(entry?.senses?.[0]?.definition).toBe("Japanese (language)");
+  });
+
+  it("drops Wikipedia definition stubs, which are not dictionary senses", async () => {
+    respondWith(fixture);
+    const entry = await createJishoProvider().lookup("日本語", "ja");
+
+    expect(entry?.senses?.some((s) => s.partOfSpeech === "wikipedia definition")).toBe(false);
+  });
+
+  it("returns null when the top result is not actually the word asked for", async () => {
+    respondWith(fixture);
+    expect(await createJishoProvider().lookup("違う言葉", "ja")).toBeNull();
+  });
+
+  it("omits the reading for a kana only word, which already reads as itself", async () => {
+    respondWith({ data: [{ japanese: [{ word: "ねこ", reading: "ねこ" }], senses: [{ english_definitions: ["cat"], parts_of_speech: ["Noun"] }] }] });
+    const entry = await createJishoProvider().lookup("ねこ", "ja");
+
+    expect(entry?.reading).toBeUndefined();
   });
 });

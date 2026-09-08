@@ -36,6 +36,12 @@ export async function fetchJson<T>(url: string, options: FetchJsonOptions): Prom
       signal: controller.signal,
       headers: {
         Accept: "application/json",
+        // Node's own fetch sends no User-Agent at all unless one is set, and
+        // a Cloudflare backed API such as Jisho treats that blank header as
+        // bot traffic and returns an HTML challenge page instead of JSON.
+        // Naming the project honestly, rather than masquerading as a
+        // browser, is enough to clear that check.
+        "User-Agent": "Wakaru/0.1 (+https://github.com/Abudora-0/Wakaru)",
         ...(body ? { "Content-Type": "application/json" } : {}),
         ...headers,
       },
