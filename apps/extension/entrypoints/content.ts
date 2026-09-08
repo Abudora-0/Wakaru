@@ -90,6 +90,11 @@ class PageReader {
     for (const image of this.candidates()) {
       if (this.tracked.has(image)) continue;
       this.attach(image);
+
+      // A whole volume, not one page at a time: once a reader has read one
+      // page on this site, the permission that unlocked it already covers
+      // the rest, and every page after it can read itself as it loads.
+      if (this.settings.autoScan) this.enqueueAuto(image);
     }
 
     // Drop anything the site has since removed from the document.
@@ -113,13 +118,45 @@ class PageReader {
     button.addEventListener("click", (event) => {
       event.preventDefault();
       event.stopPropagation();
-      void this.read(image);
+      void this.read(image, { auto: false });
     });
 
     frame.append(button);
     this.layer.append(frame);
     this.tracked.set(image, { image, frame, state: "idle" });
     this.place(image, frame);
+  }
+
+  /* -------------------------------------------------------- auto reading */
+
+  private autoQueue: HTMLImageElement[] = [];
+  private autoDraining = false;
+
+  /**
+   * Queued rather than fired immediately, and drained one at a time.
+   *
+   * A long strip or an infinite scroll gallery can drop a dozen new images
+   * into the page in one MutationObserver tick, and OCR is CPU heavy enough
+   * that running a dozen of them at once would stall the tab rather than
+   * read it faster. One at a time keeps the page responsive while it works
+   * through however many pages just appeared.
+   */
+  private enqueueAuto(image: HTMLImageElement): void {
+    this.autoQueue.push(image);
+    if (!this.autoDraining) void this.drainAuto();
+  }
+
+  private async drainAuto(): Promise<void> {
+    this.autoDraining = true;
+    try {
+      let image: HTMLImageElement | undefined;
+      while ((image = this.autoQueue.shift())) {
+        if (!image.isConnected) continue;
+        await this.read(image, { auto: true });
+      }
+    } finally {
+      this.autoDraining = false;
+    }
   }
 
   /** Position in document coordinates so the overlay scrolls with the page. */
@@ -156,17 +193,33 @@ class PageReader {
     }
   }
 
-  private async read(image: HTMLImageElement): Promise<void> {
+  private async read(image: HTMLImageElement, { auto }: { auto: boolean }): Promise<void> {
     const entry = this.tracked.get(image);
     if (!entry || entry.state === "working") return;
+    // An automatic pass only ever meets an image once, right after it is
+    // attached, but a manual re-click on a page already read should still
+    // work, so only the auto path skips one that already finished.
+    if (auto && entry.state === "done") return;
 
     // The extension asks for site access only when a person actually uses it,
     // rather than holding permission for every site from install onward.
-    const origin = `${new URL(image.currentSrc || image.src, location.href).origin}/*`;
-    const granted = await chrome.permissions.request({ origins: [origin, `${location.origin}/*`] }).catch(() => false);
-    if (!granted) {
-      this.setState(entry, "failed", "Wakaru needs access to this site to read the image.");
-      return;
+    const origins = [`${new URL(image.currentSrc || image.src, location.href).origin}/*`, `${location.origin}/*`];
+
+    let granted: boolean;
+    if (auto) {
+      // chrome.permissions.request only works from a real click, so an
+      // automatic read can never be the thing that first asks for a site.
+      // It can only ride on a grant an earlier manual read already won, and
+      // silently sits this page out otherwise: the seal button is still
+      // there, waiting for the click that would grant it.
+      granted = await chrome.permissions.contains({ origins }).catch(() => false);
+      if (!granted) return;
+    } else {
+      granted = await chrome.permissions.request({ origins }).catch(() => false);
+      if (!granted) {
+        this.setState(entry, "failed", "Wakaru needs access to this site to read the image.");
+        return;
+      }
     }
 
     this.setState(entry, "working", "Reading. The first page downloads a language model.");

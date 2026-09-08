@@ -61,6 +61,11 @@ export interface Settings {
   target: string;
   /** Minimum image edge in pixels before the overlay button is offered. */
   minImageSize: number;
+  /**
+   * Read every new page on a site automatically once the first one has been
+   * read by hand. Site access can only ever be granted from a real click, so
+   * this rides on that grant rather than asking for it itself.
+   */
   autoScan: boolean;
 }
 

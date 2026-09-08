@@ -113,6 +113,20 @@ function mountSize(current: number): void {
   input.addEventListener("change", () => paint(Number(input.value) || DEFAULT_SETTINGS.minImageSize, true));
 }
 
+function mountAutoScan(current: boolean): void {
+  const input = document.querySelector<HTMLInputElement>("#autoscan");
+  const state = document.querySelector<HTMLElement>("#autoscan-state");
+  if (!input || !state) return;
+
+  input.checked = current;
+  state.textContent = current ? "on" : "off";
+
+  input.addEventListener("change", () => {
+    state.textContent = input.checked ? "on" : "off";
+    void saveSettings({ autoScan: input.checked }).then(() => announce("Saved"));
+  });
+}
+
 function mountEndpoint(current: string): void {
   const input = document.querySelector<HTMLInputElement>("#apibase");
   if (!input) return;
@@ -131,6 +145,7 @@ async function main(): Promise<void> {
   mountScripts(settings.script);
   mountTarget(settings.target);
   mountSize(settings.minImageSize);
+  mountAutoScan(settings.autoScan);
   mountEndpoint(settings.apiBase);
 }
 

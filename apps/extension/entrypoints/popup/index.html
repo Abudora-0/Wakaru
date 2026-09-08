@@ -64,6 +64,21 @@
       </section>
 
       <section class="field">
+        <h2 class="field__label wk-caps" id="autoscan-label">Reading a whole volume</h2>
+        <label class="wk-toggle">
+          <input type="checkbox" class="wk-toggle__input" id="autoscan" aria-labelledby="autoscan-label" />
+          <span class="wk-toggle__track">
+            <span class="wk-toggle__knob"></span>
+          </span>
+          <span class="wk-toggle__state" id="autoscan-state">off</span>
+        </label>
+        <p class="hint">
+          Once you have read one page on a site, read every page after it automatically as it loads, rather than
+          pressing the seal on each one.
+        </p>
+      </section>
+
+      <section class="field">
         <h2 class="field__label wk-caps" id="apibase-label">Translator endpoint</h2>
         <input
           id="apibase"
