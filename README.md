@@ -18,6 +18,7 @@ free sources. No API keys, no accounts, no paid tier, no trial.
 [![Dialects](https://img.shields.io/badge/dialects-38%20curated-D8412F?style=flat-square)](#languages-and-dialects)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2E6E57?style=flat-square)](CONTRIBUTING.md)
 [![CI](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml/badge.svg)](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml)
+[![Extension release](https://img.shields.io/github/v/release/Abudora-0/Wakaru?label=extension&color=2B3A67&style=flat-square)](https://github.com/Abudora-0/Wakaru/releases/latest)
 
 **[wakaruu.vercel.app](https://wakaruu.vercel.app)**
 
@@ -189,13 +190,26 @@ No code changes. See [CONTRIBUTING.md](CONTRIBUTING.md).
 A website cannot read another website's page, so the in place reader is a
 browser extension. The site itself takes a page you give it.
 
+**The easy way:** download the pre-built extension from
+[the latest release](https://github.com/Abudora-0/Wakaru/releases/latest),
+unzip it, and load it unpacked. Chrome, Edge and other Chromium browsers use
+`chrome://extensions` with developer mode on; Firefox uses
+`about:debugging#/runtime/this-firefox` and **Load Temporary Add-on**, which
+lasts until Firefox restarts since the build is not signed. The release notes
+walk through both.
+
+**Building it yourself**, which is the only way to change the default
+translator endpoint before install rather than after:
+
 ```bash
-npm run ext:build
+npm run ext:build           # Chrome, Edge and other Chromium browsers
+npm run ext:build:firefox   # Firefox
 ```
 
-Then load `apps/extension/.output/chrome-mv3` at `chrome://extensions` with
-developer mode on. A seal appears on every large image; press it to read that
-page.
+Then load `apps/extension/.output/chrome-mv3` (or `firefox-mv2`) the same way
+as above. A seal appears on every large image; press it to read that page.
+Once you have read one page on a site by hand, every page after it reads
+itself automatically as it loads, unless turned off in the popup.
 
 Three details in there are worth knowing about, because they are the parts that
 usually break:
