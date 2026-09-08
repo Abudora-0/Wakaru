@@ -332,6 +332,14 @@ voice mirror this runtime is pinned to, so they fall back to a system voice.
 Both are widely installed, so most readers still hear them, but the site says
 so rather than pretending.
 
+**Neither does South Asia.** Hindi, Urdu, Punjabi, Bengali, Tamil, Telugu,
+Malayalam, Kannada, Gujarati and Marathi have no voice in the mirror this
+runtime is pinned to at all, checked directly against its own voice list
+rather than assumed. Hindi is common enough on device that most readers hear
+it anyway; the rest are honestly labelled "if installed" rather than
+promised, and read as "no voice" outright on a machine that has none, which
+is the correct answer rather than a silent failure.
+
 The languages page marks every entry: a downloadable voice reads as a promise,
 a system voice reads as a prediction, and neither reads as "no voice".
 
@@ -398,12 +406,19 @@ that genuinely needs a live endpoint is quarantined: `*.live.test.ts` behind
 
 ## Roadmap
 
-- [ ] Firefox build of the extension, which needs a background page path since
-      Firefox MV3 has no offscreen API
-- [ ] More dialects, particularly South Asian and African varieties
-- [ ] Furigana readings on Japanese dictionary entries
-- [ ] Saved word lists and export
-- [ ] Whole volume reading in the extension rather than page by page
+- [x] Firefox build of the extension, using a direct background page path
+      since Firefox has no offscreen API and does not need one
+- [x] More dialects, particularly South Asian and African varieties, 38 and
+      counting
+- [x] Furigana readings on Japanese dictionary entries
+- [x] Saved word lists and export
+- [x] Whole volume reading in the extension rather than page by page
+- [ ] A better Japanese, Korean and Chinese OCR model. No free,
+      ONNX exportable model currently beats Tesseract for manga specifically,
+      so this waits on one existing rather than on effort here
+- [ ] Piper voices for Hindi, Urdu, Punjabi and the rest of South Asia, and for
+      Japanese and Korean. Blocked on the voice mirror this runtime is pinned
+      to adding them upstream, not something this project can fix alone
 
 ## Contributing
 
