@@ -8,6 +8,7 @@ const LINKS = [
   { href: "/dictionary", label: "Dictionary" },
   { href: "/read", label: "Read" },
   { href: "/languages", label: "Languages" },
+  { href: "/saved", label: "Saved" },
 ] as const;
 
 export function Nav() {

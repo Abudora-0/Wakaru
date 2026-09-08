@@ -1,0 +1,85 @@
+.saved__notice {
+  max-width: 60ch;
+  margin: var(--wk-s-4) 0 var(--wk-s-8);
+  color: var(--wk-text-soft);
+  font-size: var(--wk-t-sm);
+  line-height: 1.6;
+}
+
+.saved__toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--wk-s-3);
+  margin-bottom: var(--wk-s-5);
+  padding-bottom: var(--wk-s-3);
+  border-bottom: var(--wk-rule-w) solid var(--wk-rule);
+}
+
+.saved__exports {
+  display: flex;
+  gap: var(--wk-s-2);
+}
+
+.saved__list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--wk-s-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.saved__item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-s-2);
+  padding: var(--wk-s-4);
+  background: var(--wk-surface-raised);
+  border: var(--wk-rule-w) solid var(--wk-rule);
+  border-radius: var(--wk-r-2);
+  box-shadow: var(--wk-shadow-sm);
+}
+
+.saved__word {
+  display: flex;
+  flex-direction: column;
+  gap: var(--wk-s-1);
+  font-family: var(--wk-font-display);
+  font-size: var(--wk-t-md);
+  color: var(--wk-text);
+  text-decoration: none;
+}
+
+.saved__word:hover {
+  color: var(--wk-seal-text);
+}
+
+.saved__reading {
+  font-family: var(--wk-font-ui);
+  font-size: var(--wk-t-xs);
+  color: var(--wk-text-muted);
+  letter-spacing: var(--wk-track-wide);
+}
+
+.saved__definition {
+  margin: 0;
+  color: var(--wk-text-soft);
+  font-size: var(--wk-t-sm);
+  line-height: 1.5;
+  /* Three lines is enough to remind the reader what the word meant without
+     the card growing to fit an entire long definition. */
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.saved__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: auto;
+  padding-top: var(--wk-s-2);
+}

@@ -7,10 +7,21 @@ import { defineConfig, devices } from "@playwright/test";
  * collides with a dev server someone has open, and it never depends on the
  * dev overlay or on Fast Refresh timing.
  *
- * Every test intercepts the provider routes. That is deliberate: these specs
- * are about the interface, and the real providers are covered by
- * "npm run test:live". Mocking here keeps the suite deterministic, keeps it
- * fast, and stops CI from spending a free daily quota on every push.
+ * next start only serves whatever is already sitting in .next, it never
+ * rebuilds, and reuseExistingServer below means a stale build gets reused
+ * silently rather than refused. The root package.json's pree2e hook rebuilds
+ * before every `npm run e2e`, but that hook only fires for the npm script:
+ * calling `npx playwright test` directly skips it and can validate against
+ * code that no longer matches the source tree with no warning at all. Build
+ * first (`npm run build --workspace @wakaru/web`) before reaching for
+ * `npx playwright test` by hand.
+ *
+ * Most specs mock the provider routes they touch, so the interface is what is
+ * under test rather than a live upstream. A few pages call the provider chain
+ * directly from server rendering rather than over a mockable route, and those
+ * specs accept a real network round trip with a wider timeout instead. Specs
+ * that need a real upstream on purpose, rather than by necessity, are tagged
+ * @live and excluded here, covered by "npm run e2e:live" instead.
  */
 
 const PORT = 3123;

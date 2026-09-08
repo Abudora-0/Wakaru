@@ -35,7 +35,7 @@ test.describe("the landing page", () => {
   test("counts languages and dialects from the registry, not from prose", async ({ page }) => {
     const figures = await page.locator(".stat__figure").allTextContents();
     expect(figures).toContain("107");
-    expect(figures).toContain("31");
+    expect(figures).toContain("38");
   });
 
   test("shows a worked dialect example rather than describing the feature", async ({ page }) => {

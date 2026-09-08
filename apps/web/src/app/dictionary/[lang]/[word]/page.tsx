@@ -5,6 +5,7 @@ import { getLanguage } from "@wakaru/core";
 import { getDictionaryChain } from "@/lib/providers";
 import { AudioButton } from "@/components/AudioButton";
 import { SpeakButton } from "@/components/SpeakButton";
+import { SaveButton } from "@/components/SaveButton";
 import { DictionarySearch } from "@/components/DictionarySearch";
 import "../../dictionary.css";
 
@@ -125,6 +126,12 @@ export default async function EntryPage({ params }: Props) {
             </div>
             <div className="headword__tools">
               <SpeakButton text={entry.word} lang={entry.lang} label={`Hear ${entry.word} spoken`} />
+              <SaveButton
+                word={entry.word}
+                lang={entry.lang}
+                definition={entry.senses[0]?.definition ?? ""}
+                {...(entry.reading ? { reading: entry.reading } : {})}
+              />
             </div>
           </header>
 

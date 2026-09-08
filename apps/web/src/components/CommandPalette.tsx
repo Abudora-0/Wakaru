@@ -8,7 +8,7 @@ import "./palette.css";
 /**
  * The command palette.
  *
- * Wakaru has four surfaces and 107 languages, so the fastest route to any of
+ * Wakaru has five surfaces and 107 languages, so the fastest route to any of
  * them is typing rather than navigating. Everything the palette offers is also
  * reachable by clicking: this is an accelerator, not the only path.
  *
@@ -104,6 +104,7 @@ export function CommandPalette() {
       { id: "nav-dictionary", label: "Dictionary", hint: "/dictionary", glyph: "辞", group: "Go to", keywords: "define word meaning lookup", run: go("/dictionary") },
       { id: "nav-read", label: "Read a raw page", hint: "/read", glyph: "読", group: "Go to", keywords: "manga manhwa ocr scan", run: go("/read") },
       { id: "nav-languages", label: "Languages and dialects", hint: "/languages", glyph: "語", group: "Go to", keywords: "specimen script coverage", run: go("/languages") },
+      { id: "nav-saved", label: "Saved words", hint: "/saved", glyph: "栞", group: "Go to", keywords: "bookmark list export", run: go("/saved") },
     ];
 
     const theme: Action[] = [
