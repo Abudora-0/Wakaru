@@ -15,7 +15,7 @@ free sources. No API keys, no accounts, no paid tier, no trial.
 [![TypeScript](https://img.shields.io/badge/TypeScript-strict-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
 [![Tesseract.js](https://img.shields.io/badge/OCR-Tesseract.js%207-2B3A67?style=flat-square)](https://tesseract.projectnaptha.com)
 [![Languages](https://img.shields.io/badge/languages-107-14110F?style=flat-square)](#languages-and-dialects)
-[![Dialects](https://img.shields.io/badge/dialects-31%20curated-D8412F?style=flat-square)](#languages-and-dialects)
+[![Dialects](https://img.shields.io/badge/dialects-38%20curated-D8412F?style=flat-square)](#languages-and-dialects)
 [![PRs welcome](https://img.shields.io/badge/PRs-welcome-2E6E57?style=flat-square)](CONTRIBUTING.md)
 [![CI](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml/badge.svg)](https://github.com/Abudora-0/Wakaru/actions/workflows/ci.yml)
 
@@ -46,6 +46,50 @@ the text is recognised and translated, and the result is drawn back into the
 bubbles it came from. Recognition runs in your browser, so the page is never
 uploaded anywhere. A browser extension does the same thing in place on any raw
 site you are already reading.
+
+## Screenshots
+
+<table>
+<tr>
+<td width="50%">
+
+**The cover.** Three surfaces, one seal, no sign-up wall between you and any
+of them.
+
+<img src="docs/screenshots/landing-dark.png" alt="The Wakaru landing page, dark theme" />
+
+</td>
+<td width="50%">
+
+**Translate, refined.** Mexican Spanish turns `computadora` and `carro` back
+into what a Mexican speaker actually says, and the ledger underneath names
+every word it touched and why.
+
+<img src="docs/screenshots/translate-light.png" alt="Translating into Mexican Spanish, with the dialect ledger" />
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Define.** A printed dictionary page, not a search result: senses numbered,
+sources stamped in the margin, licences included.
+
+<img src="docs/screenshots/dictionary-dark.png" alt="The dictionary entry for serendipity, dark theme" />
+
+</td>
+<td width="50%">
+
+**Read.** A raw manhwa panel, Korean bubble detected and boxed by the OCR
+pipeline, recognised entirely on this machine.
+
+<img src="docs/screenshots/read-result-dark.png" alt="A raw manhwa page with a detected speech bubble outlined" />
+
+</td>
+</tr>
+</table>
+
+<img src="docs/screenshots/languages-light.png" alt="The languages specimen page, light theme" />
 
 ## Quick start
 
