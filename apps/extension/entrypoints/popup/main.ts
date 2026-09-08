@@ -79,10 +79,19 @@ function mountTarget(current: string): void {
 }
 
 function mountSize(current: number): void {
-  const input = document.querySelector<HTMLInputElement>("#minsize");
-  const down = document.querySelector<HTMLButtonElement>("#minsize-down");
-  const up = document.querySelector<HTMLButtonElement>("#minsize-up");
-  if (!input || !down || !up) return;
+  const queriedInput = document.querySelector<HTMLInputElement>("#minsize");
+  const queriedDown = document.querySelector<HTMLButtonElement>("#minsize-down");
+  const queriedUp = document.querySelector<HTMLButtonElement>("#minsize-up");
+  if (!queriedInput || !queriedDown || !queriedUp) return;
+
+  // A guard on the outer const does not narrow the type inside paint below:
+  // that is a nested function, and TypeScript never carries narrowing across
+  // a function boundary. Rebinding to fresh, explicitly typed consts here is
+  // what lets paint and the listeners below see plain elements rather than
+  // the original nullable union.
+  const input: HTMLInputElement = queriedInput;
+  const down: HTMLButtonElement = queriedDown;
+  const up: HTMLButtonElement = queriedUp;
 
   const clamp = (value: number) => Math.min(MAX_SIZE, Math.max(MIN_SIZE, value));
 

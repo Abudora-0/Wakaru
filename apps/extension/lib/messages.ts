@@ -82,7 +82,11 @@ export const DEFAULT_SETTINGS: Settings = {
 };
 
 export async function loadSettings(): Promise<Settings> {
-  const stored = await chrome.storage.sync.get(DEFAULT_SETTINGS);
+  // chrome.storage.sync.get's "give me these keys with these defaults"
+  // overload wants a plain index signature, and Settings is deliberately a
+  // closed interface everywhere else, so the defaults are widened only for
+  // this one call rather than loosening the type readers actually see.
+  const stored = await chrome.storage.sync.get(DEFAULT_SETTINGS as unknown as Record<string, unknown>);
   return { ...DEFAULT_SETTINGS, ...stored } as Settings;
 }
 

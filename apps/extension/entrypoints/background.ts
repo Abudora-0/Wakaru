@@ -1,4 +1,5 @@
 import { DEFAULT_SETTINGS, loadSettings, type OcrResponse, type ReadPageRequest, type ReadPageResponse, type TranslatedRegion } from "../lib/messages";
+import { runOcr } from "../lib/ocr-runner";
 import type { OcrRegion } from "@wakaru/ocr";
 import { SCRIPT_TO_LANG } from "@wakaru/ocr";
 
@@ -23,6 +24,18 @@ export default defineBackground(() => {
 
 const OFFSCREEN_PATH = "offscreen.html";
 let creatingOffscreen: Promise<void> | null = null;
+
+/**
+ * Whether this browser needs the offscreen document at all.
+ *
+ * Chrome's manifest V3 service worker has no DOM. Firefox has neither the
+ * offscreen API nor the problem it solves: WXT builds it as manifest V2 by
+ * default, so this very script already runs in a persistent page with a
+ * real DOM. Checking for the API at runtime, rather than branching on the
+ * browser name, is what keeps this correct if either side of that ever
+ * changes without a matching code update here.
+ */
+const hasOffscreen = typeof chrome !== "undefined" && "offscreen" in chrome;
 
 /**
  * The service worker has no DOM, so Tesseract cannot run in it. An offscreen
@@ -108,13 +121,20 @@ async function handleReadPage(request: ReadPageRequest): Promise<ReadPageRespons
     const settings = await loadSettings();
     const dataUrl = await fetchAsDataUrl(request.imageUrl);
 
-    await ensureOffscreen();
+    let ocr: OcrResponse | undefined;
 
-    const ocr = (await chrome.runtime.sendMessage({
-      type: "ocr",
-      dataUrl,
-      script: request.script,
-    })) as OcrResponse | undefined;
+    if (hasOffscreen) {
+      await ensureOffscreen();
+      ocr = (await chrome.runtime.sendMessage({
+        type: "ocr",
+        dataUrl,
+        script: request.script,
+      })) as OcrResponse | undefined;
+    } else {
+      // Firefox's background page already has the DOM this needs, so there
+      // is no second document to create or message.
+      ocr = await runOcr(dataUrl, request.script);
+    }
 
     if (!ocr || ocr.error) {
       return { ...empty, error: ocr?.error ?? "recognition failed" };
