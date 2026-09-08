@@ -61,7 +61,7 @@ a {
 }
 
 a:hover {
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 h1, h2, h3, h4 {
@@ -220,7 +220,7 @@ h1, h2, h3, h4 {
   font-size: var(--wk-t-xs);
   letter-spacing: var(--wk-track-caps);
   text-transform: uppercase;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
   border: 2px solid var(--wk-seal);
   border-radius: var(--wk-r-1);
   transform: rotate(-1.4deg);
@@ -253,7 +253,7 @@ h1, h2, h3, h4 {
 }
 
 .column__list a:hover {
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
@@ -286,7 +286,7 @@ h1, h2, h3, h4 {
 }
 
 .colophon__bottom a:hover {
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .colophon__setin {

@@ -553,8 +553,13 @@ html::-webkit-scrollbar-button:end {
 }
 
 .wk-option[data-active="true"] .wk-option__meta {
+  /*
+   * No opacity. Opacity composites toward whatever sits behind it, and here
+   * that is the seal background, which quietly pulled an already deliberate
+   * on-seal color below 4.5:1. The smaller size and mono face already carry
+   * the "this is the secondary line" distinction without gambling contrast.
+   */
   color: var(--wk-text-on-seal);
-  opacity: 0.85;
 }
 
 .wk-option__native {

@@ -58,7 +58,7 @@
   font-family: var(--wk-font-display);
   font-size: var(--wk-t-md);
   letter-spacing: 0.3em;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .cover__lede {
@@ -225,7 +225,7 @@
   font-size: var(--wk-t-xs);
   letter-spacing: var(--wk-track-caps);
   text-transform: uppercase;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .strip__demo {
@@ -306,7 +306,7 @@
   font-weight: 400;
   letter-spacing: var(--wk-track-caps);
   text-transform: uppercase;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .plainly__item p {

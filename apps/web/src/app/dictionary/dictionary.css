@@ -48,7 +48,7 @@
   font-family: var(--wk-font-mono);
   font-size: 10px;
   line-height: 1.5;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
   border: 2px solid var(--wk-seal);
   border-radius: var(--wk-r-1);
   transform: rotate(-1.6deg);
@@ -74,7 +74,7 @@
   font-family: var(--wk-font-display);
   font-size: var(--wk-t-md);
   line-height: 1;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
   margin-bottom: var(--wk-s-1);
 }
 
@@ -158,7 +158,7 @@
   font-size: var(--wk-t-xs);
   letter-spacing: var(--wk-track-caps);
   text-transform: uppercase;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .sense__definition {

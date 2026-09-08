@@ -29,7 +29,14 @@
   --wk-raw-night-3: #241f1a;
   --wk-raw-bone: #ede6d9;
   --wk-raw-bone-2: #bdb3a4;
-  --wk-raw-bone-3: #8a8074;
+  /*
+   * Lightened from #8a8074. That original measured 4.21:1 against
+   * --wk-surface-raised, the lightest surface muted text sits on in dark
+   * theme, such as the language specimen cards. Close, but short of the
+   * 4.5:1 floor, and this is the single most widely used secondary text
+   * color in the whole system, so the fix belongs at the token.
+   */
+  --wk-raw-bone-3: #958a7e;
   --wk-raw-vermilion-lift: #e4553f;
 
   /* ---- semantic surfaces ---- */
@@ -46,7 +53,19 @@
   --wk-text-on-ink: var(--wk-raw-paper);
 
   /* ---- accent and status ---- */
-  --wk-seal: var(--wk-raw-vermilion);
+  /*
+   * The brand mark uses the pure vermilion raw tokens. Text and filled
+   * controls use these adjusted shades instead, because the pure color falls
+   * short of 4.5:1 against paper both as text and as a button fill under
+   * paper colored text: measured at 3.89:1 either direction. --wk-seal is
+   * darkened just enough to clear that bar in both roles at once, which
+   * light theme allows since darkening helps text-on-page and fill-under-
+   * light-text the same way. --wk-seal-text exists for API symmetry with
+   * dark theme, where the two roles need different shades; here it is the
+   * same value as --wk-seal.
+   */
+  --wk-seal: #bf3a2b;
+  --wk-seal-text: #bf3a2b;
   --wk-seal-deep: var(--wk-raw-vermilion-deep);
   --wk-seal-wash: rgba(216, 65, 47, 0.1);
   --wk-indigo: var(--wk-raw-indigo);
@@ -168,8 +187,22 @@
   --wk-text-on-seal: #fff6ef;
   --wk-text-on-ink: var(--wk-raw-night);
 
-  --wk-seal: var(--wk-raw-vermilion-lift);
-  --wk-seal-deep: #b83a28;
+  /*
+   * Dark theme needs two shades where light theme needed one. --wk-seal fills
+   * buttons and chips under near white text, which requires a darker vermilion
+   * than the pure brand mark to reach 4.5:1: the raw vermilion-lift measured
+   * 3.47:1 there. --wk-seal-text is a lightened step up from the raw brand
+   * color rather than the brand color itself: the raw value clears 4.5:1
+   * against the two darkest surfaces but falls to 4.4:1 against
+   * --wk-surface-raised, the lightest one a card can sit on, which is exactly
+   * where the language specimen cards put it. Darkening one shade to fix the
+   * button case would have failed the text case, and no single lightness
+   * satisfies both a button fill and text on every dark surface at once, so
+   * the two roles get their own values instead of fighting over one.
+   */
+  --wk-seal: #ae2c1e;
+  --wk-seal-text: #e15f51;
+  --wk-seal-deep: #832116;
   --wk-seal-wash: rgba(228, 85, 63, 0.14);
   --wk-indigo: #7b90cf;
   --wk-indigo-wash: rgba(123, 144, 207, 0.14);
@@ -204,8 +237,11 @@
     --wk-text-on-seal: #fff6ef;
     --wk-text-on-ink: var(--wk-raw-night);
 
-    --wk-seal: var(--wk-raw-vermilion-lift);
-    --wk-seal-deep: #b83a28;
+    /* Kept identical to the explicit [data-theme="dark"] block above, see the
+       comment there for why dark theme needs two separate seal shades. */
+    --wk-seal: #ae2c1e;
+    --wk-seal-text: #e15f51;
+    --wk-seal-deep: #832116;
     --wk-seal-wash: rgba(228, 85, 63, 0.14);
     --wk-indigo: #7b90cf;
     --wk-indigo-wash: rgba(123, 144, 207, 0.14);

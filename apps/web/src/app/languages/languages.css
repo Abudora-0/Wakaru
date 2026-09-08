@@ -94,7 +94,7 @@
   display: block;
   margin-top: 2px;
   font-size: var(--wk-t-xs);
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .ledger-table {
@@ -123,7 +123,7 @@
 .ledger-table code {
   font-family: var(--wk-font-mono);
   font-size: var(--wk-t-xs);
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .tablewrap {
@@ -159,8 +159,14 @@
 }
 
 .slug__voice[data-level="rare"] {
+  /*
+   * Opacity used to carry the "this is the lesser case" weight here, but
+   * opacity composites with whatever sits behind it, and against the white
+   * language cards that quietly dropped an already muted color under 4.5:1.
+   * The dashed border alone reads as understated without gambling contrast
+   * on an unknown background.
+   */
   color: var(--wk-text-muted);
-  opacity: 0.7;
   border-style: dashed;
 }
 

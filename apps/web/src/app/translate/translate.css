@@ -107,7 +107,7 @@
 }
 
 .counter--over {
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
   font-weight: 700;
 }
 
@@ -188,7 +188,7 @@
 
 .edits__to {
   font-weight: 700;
-  color: var(--wk-seal);
+  color: var(--wk-seal-text);
 }
 
 .edits__note {
