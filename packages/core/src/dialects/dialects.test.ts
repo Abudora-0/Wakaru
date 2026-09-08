@@ -75,6 +75,34 @@ describe("lexicon overlay", () => {
     expect(result.text).toBe("unchanged");
     expect(result.edits).toHaveLength(0);
   });
+
+  it("swaps water between the two Bengali standards, in both directions", () => {
+    expect(applyDialect("আমি জল চাই", "bn-BD").text).toContain("পানি");
+    expect(applyDialect("আমি পানি চাই", "bn-IN").text).toContain("জল");
+  });
+
+  it("swaps everyday nouns between the two Vietnamese standards", () => {
+    const north = applyDialect("Cho tôi một cái tô và một cái muỗng", "vi-Bac");
+    expect(north.text).toContain("bát");
+    expect(north.text).toContain("thìa");
+
+    const south = applyDialect("Cho tôi một cái bát và một cái thìa", "vi-Nam");
+    expect(south.text).toContain("tô");
+    expect(south.text).toContain("muỗng");
+  });
+
+  it("writes Belgian numerals without France's compound tens", () => {
+    const result = applyDialect("Il a soixante-dix ans et quatre-vingt-dix francs", "fr-BE");
+    expect(result.text).toBe("Il a septante ans et nonante francs");
+  });
+
+  it("does not cascade a chain of overlapping substitutions into one word", () => {
+    // A regression guard: an earlier draft of fr-BE relabelled breakfast,
+    // lunch and dinner in one pass, each replacement feeding the next rule's
+    // pattern, which collapsed all three meals into the same final word.
+    const result = applyDialect("mon dîner de ce midi", "fr-BE");
+    expect(result.text).toBe("mon dîner de ce midi");
+  });
 });
 
 describe("transliteration", () => {

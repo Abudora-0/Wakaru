@@ -115,7 +115,7 @@ rather than hiding it.
 
 ## Languages and dialects
 
-107 languages, 31 curated dialects.
+107 languages, 38 curated dialects.
 
 **No free API exposes dialects.** Not one. So the dialect layer is not an API
 call, it is a hand written, reviewable dataset in this repository, applied in

@@ -218,6 +218,37 @@ export const DIALECTS: readonly DialectDefinition[] = [
       { from: "afternoon", to: "arvo", confidence: "low", note: "informal register only" },
     ],
   },
+  {
+    code: "en-ZA",
+    base: "en",
+    name: "South African English",
+    native: "South African English",
+    region: "South Africa",
+    ttsLocales: ["en-ZA", "en-GB"],
+    summary: "British spelling base with vocabulary borrowed from Afrikaans and the local vernacular.",
+    lexicon: [
+      { from: "traffic light", to: "robot", confidence: "high" },
+      { from: "pickup truck", to: "bakkie", confidence: "high" },
+      { from: "sneakers", to: "takkies", confidence: "high" },
+      { from: "barbecue", to: "braai", confidence: "high" },
+      { from: "flip flops", to: "slops", confidence: "medium" },
+    ],
+  },
+  {
+    code: "en-NG",
+    base: "en",
+    name: "Nigerian English",
+    native: "Nigerian English",
+    region: "Nigeria",
+    ttsLocales: ["en-NG", "en-GB"],
+    summary: "British spelling base, with vocabulary shaped by the country's own Pidgin.",
+    lexicon: [
+      { from: "traffic jam", to: "go-slow", confidence: "high" },
+      { from: "motorcycle taxi", to: "okada", confidence: "high" },
+      { from: "gas station", to: "filling station", confidence: "medium" },
+      { from: "trouble", to: "wahala", confidence: "medium", note: "informal, from the country's Pidgin" },
+    ],
+  },
 
   /* ------------------------------------------------------------- Arabic */
   {
@@ -275,6 +306,37 @@ export const DIALECTS: readonly DialectDefinition[] = [
   },
 
   /* --------------------------------------------------------- South Asia */
+  {
+    code: "bn-BD",
+    base: "bn",
+    name: "Bangladeshi Bengali",
+    native: "বাংলা (বাংলাদেশ)",
+    region: "Bangladesh",
+    ttsLocales: ["bn-BD"],
+    summary: "The Muslim majority standard, drawing everyday vocabulary from Persian and Arabic.",
+    lexicon: [
+      { from: "জল", to: "পানি", confidence: "high", note: "water" },
+      { from: "মা", to: "আম্মা", confidence: "medium", note: "mother" },
+      { from: "বাবা", to: "আব্বা", confidence: "medium", note: "father" },
+      { from: "নিমন্ত্রণ", to: "দাওয়াত", confidence: "medium", note: "invitation" },
+    ],
+  },
+  {
+    code: "bn-IN",
+    base: "bn",
+    name: "Indian Bengali",
+    native: "বাংলা (ভারত)",
+    region: "West Bengal, India",
+    providerLocale: "bn-IN",
+    ttsLocales: ["bn-IN"],
+    summary: "The Hindu majority standard, drawing everyday vocabulary from Sanskrit.",
+    lexicon: [
+      { from: "পানি", to: "জল", confidence: "high", note: "water" },
+      { from: "আম্মা", to: "মা", confidence: "medium", note: "mother" },
+      { from: "আব্বা", to: "বাবা", confidence: "medium", note: "father" },
+      { from: "দাওয়াত", to: "নিমন্ত্রণ", confidence: "medium", note: "invitation" },
+    ],
+  },
   {
     code: "ur-PK",
     base: "ur",
@@ -424,6 +486,21 @@ export const DIALECTS: readonly DialectDefinition[] = [
     ],
   },
   {
+    code: "fr-BE",
+    base: "fr",
+    name: "Belgian French",
+    native: "Français de Belgique",
+    region: "Belgium",
+    providerLocale: "fr-BE",
+    ttsLocales: ["fr-BE", "fr-FR"],
+    summary: "Uses septante and nonante rather than France's compound seventies and nineties.",
+    lexicon: [
+      { from: "soixante-dix", to: "septante", confidence: "high", note: "seventy" },
+      { from: "quatre-vingt-dix", to: "nonante", confidence: "high", note: "ninety" },
+      { from: "portable", to: "GSM", confidence: "medium", note: "mobile phone, from the network standard's name" },
+    ],
+  },
+  {
     code: "de-DE",
     base: "de",
     name: "German",
@@ -502,6 +579,45 @@ export const DIALECTS: readonly DialectDefinition[] = [
     lexicon: [
       { from: "leuk", to: "plezant", confidence: "medium" },
       { from: "sinaasappel", to: "appelsien", confidence: "medium" },
+    ],
+  },
+
+  /* ------------------------------------------------------- Southeast Asia */
+  {
+    code: "vi-Bac",
+    base: "vi",
+    name: "Northern Vietnamese",
+    native: "Tiếng Việt (miền Bắc)",
+    region: "Hanoi and the north",
+    ttsLocales: ["vi-VN"],
+    summary: "The Hanoi standard, taught abroad. Everyday nouns differ sharply from the south.",
+    lexicon: [
+      { from: "tô", to: "bát", confidence: "high", note: "bowl" },
+      { from: "muỗng", to: "thìa", confidence: "high", note: "spoon" },
+      { from: "heo", to: "lợn", confidence: "high", note: "pig" },
+      { from: "thơm", to: "dứa", confidence: "high", note: "pineapple" },
+      { from: "té", to: "ngã", confidence: "high", note: "to fall down" },
+      { from: "bắp", to: "ngô", confidence: "high", note: "corn" },
+      { from: "mè", to: "vừng", confidence: "high", note: "sesame" },
+    ],
+  },
+  {
+    code: "vi-Nam",
+    base: "vi",
+    name: "Southern Vietnamese",
+    native: "Tiếng Việt (miền Nam)",
+    region: "Ho Chi Minh City and the south",
+    ttsLocales: ["vi-VN"],
+    summary: "The Saigon standard. Shares the same everyday nouns the north uses different words for.",
+    lexicon: [
+      { from: "bát", to: "tô", confidence: "high", note: "bowl" },
+      { from: "thìa", to: "muỗng", confidence: "high", note: "spoon" },
+      { from: "lợn", to: "heo", confidence: "high", note: "pig" },
+      { from: "dứa", to: "thơm", confidence: "high", note: "pineapple" },
+      { from: "ngã", to: "té", confidence: "high", note: "to fall down" },
+      { from: "ngô", to: "bắp", confidence: "high", note: "corn" },
+      { from: "vừng", to: "mè", confidence: "high", note: "sesame" },
+      { from: "ốm", to: "bịnh", confidence: "medium", note: "sick, not thin: ốm means thin in the south" },
     ],
   },
 
