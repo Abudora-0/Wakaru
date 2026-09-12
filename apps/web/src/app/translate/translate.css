@@ -143,20 +143,6 @@
   text-transform: uppercase;
 }
 
-.notice {
-  margin-top: var(--wk-s-3);
-  padding: var(--wk-s-3) var(--wk-s-4);
-  font-size: var(--wk-t-sm);
-  border: var(--wk-rule-w) solid var(--wk-seal);
-  background-color: var(--wk-seal-wash);
-}
-
-.notice--quiet {
-  border-color: var(--wk-rule-soft);
-  background-color: transparent;
-  color: var(--wk-text-muted);
-}
-
 /* The edit ledger, listing exactly what the dialect overlay changed. */
 .edits {
   margin-top: var(--wk-s-4);

@@ -391,6 +391,28 @@ h1, h2, h3, h4 {
 }
 
 /* ==========================================================================
+   Notice
+   ==========================================================================
+   A short standing message: a cold-start error, an empty result, a caveat.
+   Used by the translator spread and by the dictionary entry route, so it
+   lives here where every page already loads it.
+   ========================================================================== */
+
+.notice {
+  margin-top: var(--wk-s-3);
+  padding: var(--wk-s-3) var(--wk-s-4);
+  font-size: var(--wk-t-sm);
+  border: var(--wk-rule-w) solid var(--wk-seal);
+  background-color: var(--wk-seal-wash);
+}
+
+.notice--quiet {
+  border-color: var(--wk-rule-soft);
+  background-color: transparent;
+  color: var(--wk-text-muted);
+}
+
+/* ==========================================================================
    Motion
    ==========================================================================
    Everything here is inside a no-preference query, so a reader who has asked
